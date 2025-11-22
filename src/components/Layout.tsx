@@ -1,6 +1,7 @@
+
 import { ReactNode, useState } from "react";
 import { Link } from "react-router-dom";
-import { ShoppingBag, Menu, X, Heart, Phone } from "lucide-react";
+import { Menu, X, ShoppingBag, Heart, Search, Phone, Mail } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Badge } from "@/components/ui/badge";
@@ -151,9 +152,17 @@ export default function Layout({ children }: LayoutProps) {
               <p className="text-sm text-muted-foreground max-w-md mb-4">
                 Handpicked deals for students and budget shoppers. We curate the best affordable fashion and essentials for college life.
               </p>
-              <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                <Phone className="h-4 w-4" />
-                <span>+91 1234567890</span>
+              <div className="flex flex-col gap-2 text-sm text-muted-foreground">
+                <div className="flex items-center gap-2">
+                  <Phone className="h-4 w-4" />
+                  <span>+91 9390730129</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Mail className="h-4 w-4" />
+                  <a href="mailto:sandeepnaikb0@gmail.com" className="hover:text-primary transition-colors">
+                    sandeepnaikb0@gmail.com
+                  </a>
+                </div>
               </div>
             </div>
 
