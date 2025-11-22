@@ -21,11 +21,13 @@ export const toggleFavorite = (productId: string): boolean => {
         // Remove from favorites
         favorites.splice(index, 1);
         localStorage.setItem(FAVORITES_KEY, JSON.stringify(favorites));
+        window.dispatchEvent(new Event("favorites-updated"));
         return false;
     } else {
         // Add to favorites
         favorites.push(productId);
         localStorage.setItem(FAVORITES_KEY, JSON.stringify(favorites));
+        window.dispatchEvent(new Event("favorites-updated"));
         return true;
     }
 };

@@ -1,7 +1,7 @@
 import { Heart, ShoppingBag } from "lucide-react";
 import Layout from "@/components/Layout";
 import ProductGrid from "@/components/ProductGrid";
-import { products } from "@/data/products";
+import { useProducts } from "@/hooks/useProducts";
 import { useFavorites } from "@/hooks/useFavorites";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -9,9 +9,20 @@ import { Link } from "react-router-dom";
 
 export default function Saved() {
     const { favorites } = useFavorites();
+    const { products, loading } = useProducts();
 
     const savedProducts = products.filter(product => favorites.includes(product.id));
     const hasProducts = savedProducts.length > 0;
+
+    if (loading) {
+        return (
+            <Layout>
+                <div className="container mx-auto px-4 py-12 text-center">
+                    <p>Loading saved deals...</p>
+                </div>
+            </Layout>
+        );
+    }
 
     return (
         <Layout>

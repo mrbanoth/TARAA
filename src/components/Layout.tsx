@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Badge } from "@/components/ui/badge";
 import { NavLink } from "@/components/NavLink";
+import { useFavorites } from "@/hooks/useFavorites";
 
 interface LayoutProps {
   children: ReactNode;
@@ -21,6 +22,7 @@ const navLinks = [
 
 export default function Layout({ children }: LayoutProps) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const { favorites } = useFavorites();
 
   return (
     <div className="min-h-screen flex flex-col bg-background text-foreground">
@@ -77,7 +79,12 @@ export default function Layout({ children }: LayoutProps) {
             <div className="flex items-center gap-4">
               <Link to="/saved" className="hidden md:flex">
                 <Button variant="ghost" size="icon" className="relative">
-                  <Heart className="h-5 w-5" />
+                  <Heart className={`h-5 w-5 ${favorites.length > 0 ? 'fill-red-500 text-red-500' : ''}`} />
+                  {favorites.length > 0 && (
+                    <span className="absolute -top-1 -right-1 bg-red-500 text-white text-[10px] font-bold rounded-full h-4 w-4 flex items-center justify-center">
+                      {favorites.length}
+                    </span>
+                  )}
                 </Button>
               </Link>
 
@@ -123,6 +130,18 @@ export default function Layout({ children }: LayoutProps) {
                             {link.label}
                           </NavLink>
                         ))}
+                        <Link
+                          to="/saved"
+                          className="text-lg font-medium text-foreground hover:text-primary transition-colors py-2 flex items-center justify-between"
+                          onClick={() => setMobileMenuOpen(false)}
+                        >
+                          Saved Items
+                          {favorites.length > 0 && (
+                            <Badge className="bg-red-500 hover:bg-red-600 text-white">
+                              {favorites.length}
+                            </Badge>
+                          )}
+                        </Link>
                       </nav>
                     </div>
                   </SheetContent>

@@ -5,7 +5,22 @@ export function useFavorites() {
     const [favorites, setFavorites] = useState<string[]>([]);
 
     useEffect(() => {
+        // Initial load
         setFavorites(getFavorites());
+
+        // Listen for updates
+        const handleStorageChange = () => {
+            setFavorites(getFavorites());
+        };
+
+        window.addEventListener("favorites-updated", handleStorageChange);
+        // Also listen for storage events (cross-tab support)
+        window.addEventListener("storage", handleStorageChange);
+
+        return () => {
+            window.removeEventListener("favorites-updated", handleStorageChange);
+            window.removeEventListener("storage", handleStorageChange);
+        };
     }, []);
 
     const toggleFavorite = (productId: string) => {
