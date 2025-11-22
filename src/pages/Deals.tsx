@@ -1,0 +1,432 @@
+/**
+ * DEALS PAGE
+ * Main deals browsing page with search and filtering
+ * 
+ * Features:
+ * - Search products by name/description
+ * - Filter by category, price range, and size
+ * - Responsive design (mobile filter sheet, desktop inline)
+ * - Active filter tags for easy removal
+ * - Product count display
+ * 
+ * Config: Edit src/data/config.ts to change:
+ * - Categories, price ranges, sizes
+ * - Trending threshold
+ * - Product counts
+ */
+
+import { useState, useMemo, useEffect } from "react";
+import { useSearchParams } from "react-router-dom";
+import Layout from "@/components/Layout";
+import ProductGrid from "@/components/ProductGrid";
+import { products, Category } from "@/data/products";
+import { useProducts } from "@/hooks/useProducts";
+import { Card } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Badge } from "@/components/ui/badge";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Label } from "@/components/ui/label";
+import { Package, Search, SlidersHorizontal, X } from "lucide-react";
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet";
+
+// Import configuration
+import {
+  CATEGORIES,
+  PRICE_RANGES,
+  AVAILABLE_SIZES,
+  isPriceInRange,
+  getCategoryLabel,
+} from "@/data/config";
+
+// ====================================
+// TYPES
+// ====================================
+interface Filters {
+  category: Category | "all";
+  priceRange: string[];
+  sizes: string[];
+  search: string;
+}
+
+// ====================================
+// MAIN COMPONENT
+// ====================================
+export default function Deals() {
+  const [searchParams] = useSearchParams();
+  const categoryParam = searchParams.get("category");
+  const { products, loading } = useProducts();
+
+  // Filter state
+  const [filters, setFilters] = useState<Filters>({
+    category: (categoryParam as Category) || "all",
+    priceRange: [],
+    sizes: [],
+    search: "",
+  });
+
+  // Update filters when URL param changes
+  useEffect(() => {
+    if (categoryParam) {
+      setFilters(prev => ({ ...prev, category: categoryParam as Category }));
+    }
+  }, [categoryParam]);
+
+  // Filter products based on current filters
+  const filteredProducts = useMemo(() => {
+    if (loading) return [];
+    return products.filter((product) => {
+      // Search filter - check name and description
+      if (filters.search) {
+        const searchLower = filters.search.toLowerCase();
+        const matchesSearch =
+          product.name.toLowerCase().includes(searchLower) ||
+          product.description.toLowerCase().includes(searchLower);
+        if (!matchesSearch) return false;
+      }
+
+      // Category filter
+      if (filters.category !== "all" && product.category !== filters.category) {
+        return false;
+      }
+
+      // Price range filter
+      if (filters.priceRange.length > 0) {
+        const matchesPrice = filters.priceRange.some((range) =>
+          isPriceInRange(product.price, range)
+        );
+        if (!matchesPrice) return false;
+      }
+
+      // Size filter - only applicable if product has sizes
+      if (filters.sizes.length > 0 && product.sizes) {
+        const matchesSize = filters.sizes.some((size) => product.sizes?.includes(size));
+        if (!matchesSize) return false;
+      }
+
+      return true;
+    });
+  }, [filters, products, loading]);
+
+  // ====================================
+  // FILTER HANDLERS
+  // ====================================
+  const handleCategoryChange = (category: Category | "all") => {
+    setFilters({ ...filters, category });
+  };
+
+  const handlePriceRangeToggle = (range: string) => {
+    const newPriceRange = filters.priceRange.includes(range)
+      ? filters.priceRange.filter((r) => r !== range)
+      : [...filters.priceRange, range];
+    setFilters({ ...filters, priceRange: newPriceRange });
+  };
+
+  const handleSizeToggle = (size: string) => {
+    const newSizes = filters.sizes.includes(size)
+      ? filters.sizes.filter((s) => s !== size)
+      : [...filters.sizes, size];
+    setFilters({ ...filters, sizes: newSizes });
+  };
+
+  const handleClearFilters = () => {
+    setFilters({ category: "all", priceRange: [], sizes: [], search: "" });
+  };
+
+  // Check if any filters are active
+  const hasActiveFilters =
+    filters.category !== "all" ||
+    filters.priceRange.length > 0 ||
+    filters.sizes.length > 0 ||
+    filters.search.length > 0;
+
+  const activeFilterCount =
+    (filters.category !== "all" ? 1 : 0) +
+    filters.priceRange.length +
+    filters.sizes.length;
+
+  // ====================================
+  // RENDER
+  // ====================================
+  return (
+    <Layout>
+      <div className="container mx-auto px-4 sm:px-6 py-6 md:py-8">
+
+        {/* ========== MOBILE LAYOUT ========== */}
+        <div className="md:hidden mb-6 space-y-3">
+          {/* Mobile Search Bar */}
+          <div className="relative">
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-muted-foreground" />
+            <Input
+              type="text"
+              placeholder="Search products..."
+              value={filters.search}
+              onChange={(e) => setFilters({ ...filters, search: e.target.value })}
+              className="pl-10 h-12 text-base"
+            />
+          </div>
+
+          {/* Mobile Filter Button */}
+          <Sheet>
+            <SheetTrigger asChild>
+              <Button variant="outline" size="lg" className="w-full">
+                <SlidersHorizontal className="h-5 w-5 mr-2" />
+                Filters
+                {activeFilterCount > 0 && (
+                  <Badge className="ml-2 bg-primary">{activeFilterCount}</Badge>
+                )}
+              </Button>
+            </SheetTrigger>
+            <SheetContent>
+              <SheetHeader>
+                <SheetTitle>Filter Products</SheetTitle>
+              </SheetHeader>
+              <div className="py-6 space-y-6">
+                {/* Mobile Categories */}
+                <div>
+                  <h3 className="font-semibold mb-3">Category</h3>
+                  <div className="flex flex-wrap gap-2">
+                    {CATEGORIES.map((cat) => (
+                      <Button
+                        key={cat.value}
+                        variant={filters.category === cat.value ? "default" : "outline"}
+                        size="sm"
+                        onClick={() => handleCategoryChange(cat.value as Category | "all")}
+                      >
+                        {cat.label}
+                      </Button>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Mobile Price Range */}
+                <div>
+                  <h3 className="font-semibold mb-3">Price Range</h3>
+                  <div className="space-y-2">
+                    {PRICE_RANGES.map((range) => (
+                      <div key={range.value} className="flex items-center gap-2">
+                        <Checkbox
+                          id={`mobile-price-${range.value}`}
+                          checked={filters.priceRange.includes(range.value)}
+                          onCheckedChange={() => handlePriceRangeToggle(range.value)}
+                        />
+                        <Label htmlFor={`mobile-price-${range.value}`} className="cursor-pointer">
+                          {range.label}
+                        </Label>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Mobile Sizes - only for T-shirts */}
+                {(filters.category === "all" || filters.category === "tshirt") && (
+                  <div>
+                    <h3 className="font-semibold mb-3">Size</h3>
+                    <div className="flex flex-wrap gap-2">
+                      {AVAILABLE_SIZES.map((size) => (
+                        <Badge
+                          key={size}
+                          variant={filters.sizes.includes(size) ? "default" : "outline"}
+                          className="cursor-pointer px-4 py-2"
+                          onClick={() => handleSizeToggle(size)}
+                        >
+                          {size}
+                        </Badge>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {/* Clear Filters Button */}
+                {hasActiveFilters && (
+                  <Button variant="outline" onClick={handleClearFilters} className="w-full">
+                    <X className="h-4 w-4 mr-2" />
+                    Clear All Filters
+                  </Button>
+                )}
+              </div>
+            </SheetContent>
+          </Sheet>
+        </div>
+
+        {/* ========== DESKTOP FILTER BOX ========== */}
+        <div className="hidden md:block mb-6">
+          <Card className="border-2 shadow-sm">
+            <div className="p-6 space-y-5">
+
+              {/* Search Row */}
+              <div className="flex items-center gap-4">
+                <div className="w-24 flex-shrink-0">
+                  <span className="text-sm font-bold text-foreground">Search</span>
+                </div>
+                <div className="relative flex-1 max-w-lg">
+                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                  <Input
+                    type="text"
+                    placeholder="Search by name or description..."
+                    value={filters.search}
+                    onChange={(e) => setFilters({ ...filters, search: e.target.value })}
+                    className="pl-9 h-11"
+                  />
+                </div>
+              </div>
+
+              {/* Divider */}
+              <div className="border-t border-border" />
+
+              {/* Category Row */}
+              <div className="flex items-start gap-4">
+                <div className="w-24 flex-shrink-0 pt-1">
+                  <span className="text-sm font-bold text-foreground">Category</span>
+                </div>
+                <div className="flex flex-wrap gap-2 flex-1">
+                  {CATEGORIES.map((cat) => (
+                    <Button
+                      key={cat.value}
+                      variant={filters.category === cat.value ? "default" : "outline"}
+                      size="sm"
+                      onClick={() => handleCategoryChange(cat.value as Category | "all")}
+                      className="rounded-full font-medium"
+                    >
+                      {cat.label}
+                    </Button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Price Row */}
+              <div className="flex items-start gap-4">
+                <div className="w-24 flex-shrink-0 pt-1">
+                  <span className="text-sm font-bold text-foreground">Price</span>
+                </div>
+                <div className="flex flex-wrap gap-5 flex-1">
+                  {PRICE_RANGES.map((range) => (
+                    <div key={range.value} className="flex items-center gap-2">
+                      <Checkbox
+                        id={`price-${range.value}`}
+                        checked={filters.priceRange.includes(range.value)}
+                        onCheckedChange={() => handlePriceRangeToggle(range.value)}
+                      />
+                      <Label htmlFor={`price-${range.value}`} className="cursor-pointer font-medium text-sm">
+                        {range.label}
+                      </Label>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Size Row - only show for T-shirts */}
+              {(filters.category === "all" || filters.category === "tshirt") && (
+                <div className="flex items-start gap-4">
+                  <div className="w-24 flex-shrink-0 pt-1">
+                    <span className="text-sm font-bold text-foreground">Size</span>
+                  </div>
+                  <div className="flex flex-wrap gap-2 flex-1">
+                    {AVAILABLE_SIZES.map((size) => (
+                      <Badge
+                        key={size}
+                        variant={filters.sizes.includes(size) ? "default" : "outline"}
+                        className="cursor-pointer px-4 py-1.5 font-medium"
+                        onClick={() => handleSizeToggle(size)}
+                      >
+                        {size}
+                      </Badge>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Clear Filters - show when filters are active */}
+              {hasActiveFilters && (
+                <>
+                  <div className="border-t border-border" />
+                  <div className="flex justify-end">
+                    <Button variant="ghost" size="sm" onClick={handleClearFilters} className="font-medium">
+                      <X className="h-4 w-4 mr-2" />
+                      Clear All Filters
+                    </Button>
+                  </div>
+                </>
+              )}
+            </div>
+          </Card>
+        </div>
+
+        {/* Active Filters Display - removable badges */}
+        {hasActiveFilters && (
+          <div className="flex items-center gap-2 flex-wrap mb-6">
+            <span className="text-sm font-medium text-muted-foreground">Active:</span>
+            {filters.category !== "all" && (
+              <Badge variant="secondary" className="gap-1.5 pl-3 pr-2 py-1">
+                {getCategoryLabel(filters.category)}
+                <button
+                  onClick={() => setFilters({ ...filters, category: "all" })}
+                  className="hover:bg-black/10 rounded-full p-0.5"
+                >
+                  <X className="h-3 w-3" />
+                </button>
+              </Badge>
+            )}
+            {filters.priceRange.map(range => (
+              <Badge key={range} variant="secondary" className="gap-1.5 pl-3 pr-2 py-1">
+                {PRICE_RANGES.find(p => p.value === range)?.label}
+                <button
+                  onClick={() => handlePriceRangeToggle(range)}
+                  className="hover:bg-black/10 rounded-full p-0.5"
+                >
+                  <X className="h-3 w-3" />
+                </button>
+              </Badge>
+            ))}
+            {filters.sizes.map(size => (
+              <Badge key={size} variant="secondary" className="gap-1.5 pl-3 pr-2 py-1">
+                Size {size}
+                <button
+                  onClick={() => handleSizeToggle(size)}
+                  className="hover:bg-black/10 rounded-full p-0.5"
+                >
+                  <X className="h-3 w-3" />
+                </button>
+              </Badge>
+            ))}
+          </div>
+        )}
+
+        {/* Results Count */}
+        <div className="mb-6">
+          <p className="text-sm text-muted-foreground">
+            Showing <span className="font-bold text-foreground">{filteredProducts.length}</span> of <span className="font-bold text-foreground">{products.length}</span> products
+          </p>
+        </div>
+
+        {/* Products Grid or Empty State */}
+        {loading || filteredProducts.length > 0 ? (
+          <ProductGrid products={filteredProducts} loading={loading} />
+        ) : (
+          <Card className="p-12 text-center">
+            <div className="flex flex-col items-center gap-4">
+              <div className="w-16 h-16 rounded-full bg-muted flex items-center justify-center">
+                <Package className="h-8 w-8 text-muted-foreground" />
+              </div>
+              <div>
+                <h3 className="text-xl font-bold mb-2">No products found</h3>
+                <p className="text-muted-foreground mb-4">
+                  Try adjusting your filters or search query
+                </p>
+                <Button variant="outline" onClick={handleClearFilters}>
+                  Clear All Filters
+                </Button>
+              </div>
+            </div>
+          </Card>
+        )}
+      </div>
+    </Layout>
+  );
+}

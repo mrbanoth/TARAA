@@ -1,0 +1,259 @@
+import { Link } from "react-router-dom";
+import { Flame, ShoppingBag, BookOpen, Laptop, Home as HomeIcon, Users, Shield, Zap } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import Layout from "@/components/Layout";
+import ProductGrid from "@/components/ProductGrid";
+import { useProducts } from "@/hooks/useProducts";
+
+export default function Index() {
+  const { products, loading } = useProducts();
+
+  const featuredProducts = products.filter((p) => p.isFeatured).slice(0, 8);
+  const trendingProducts = products
+    .filter((p) => p.clicks && p.clicks > 1000)
+    .sort((a, b) => (b.clicks || 0) - (a.clicks || 0))
+    .slice(0, 6);
+
+  const categories = [
+    {
+      name: "Oversized T-Shirts",
+      icon: ShoppingBag,
+      link: "/deals?category=tshirt",
+      color: "bg-[hsl(var(--category-furniture))]",
+      image: "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=400&q=80"
+    },
+    {
+      name: "College Bags",
+      icon: BookOpen,
+      link: "/deals?category=bag",
+      color: "bg-[hsl(var(--category-handbag))]",
+      image: "https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=400&q=80"
+    },
+    {
+      name: "Budget Tech",
+      icon: Laptop,
+      link: "/deals?category=tech",
+      color: "bg-[hsl(var(--category-tech))]",
+      image: "https://images.unsplash.com/photo-1590658268037-6bf12165a8df?w=400&q=80"
+    },
+    {
+      name: "Hostel Essentials",
+      icon: HomeIcon,
+      link: "/deals?category=hostel",
+      color: "bg-[hsl(var(--category-travel))]",
+      image: "https://images.unsplash.com/photo-1602143407151-7111542de6e8?w=400&q=80"
+    },
+  ];
+
+  const trustPoints = [
+    { icon: Users, title: "Curated Picks Only", desc: "Handpicked for college students" },
+    { icon: Shield, title: "Checkout on Trusted Apps", desc: "Safe purchases via verified platforms" },
+    { icon: Zap, title: "Affiliate + Ads Supported", desc: "Transparent revenue model" },
+  ];
+
+  const scrollToProducts = () => {
+    document.getElementById("featured-products")?.scrollIntoView({ behavior: "smooth" });
+  };
+
+  return (
+    <Layout>
+      {/* Hero Section - Reduced padding for tighter layout */}
+      <section className="bg-gradient-to-br from-blue-50 via-green-50 to-yellow-50 py-8 md:py-12 lg:py-16">
+        <div className="container mx-auto px-4 sm:px-6">
+          <div className="grid md:grid-cols-2 gap-8 md:gap-12 items-center">
+            {/* Left: Text Content */}
+            <div className="space-y-4 md:space-y-6 text-center md:text-left">
+              <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold leading-tight">
+                Student Deals And
+                <span className="block text-primary mt-1">Budget Store.</span>
+              </h1>
+              <p className="text-base sm:text-lg md:text-xl text-muted-foreground max-w-lg mx-auto md:mx-0">
+                Shopping for trendy fashion is a bit of a relaxing hobby for students, which is sometimes troubling for the bank balance. We've got you covered!
+              </p>
+              <div className="flex flex-col sm:flex-row gap-3 md:gap-4 justify-center md:justify-start">
+                <Button
+                  size="lg"
+                  onClick={scrollToProducts}
+                  className="bg-primary hover:bg-primary/90 text-white font-semibold px-6 md:px-8 py-5 md:py-6 rounded-full text-base md:text-lg"
+                >
+                  Browse Deals
+                </Button>
+                <Button
+                  variant="outline"
+                  size="lg"
+                  asChild
+                  className="font-semibold px-6 md:px-8 py-5 md:py-6 rounded-full text-base md:text-lg border-2"
+                >
+                  <Link to="/about">Learn More</Link>
+                </Button>
+              </div>
+            </div>
+
+            {/* Right: Visual */}
+            <div className="relative">
+              <div className="grid grid-cols-2 gap-3 md:gap-4">
+                {[
+                  {
+                    img: "https://images.unsplash.com/photo-1523381210434-271e8be1f52b?w=500&q=80",
+                    alt: "Fashion"
+                  },
+                  {
+                    img: "https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=500&q=80",
+                    alt: "Bags"
+                  },
+                  {
+                    img: "https://images.unsplash.com/photo-1593640408182-31c70c8268f5?w=500&q=80",
+                    alt: "Tech"
+                  },
+                  {
+                    img: "https://images.unsplash.com/photo-1555854877-bab0e564b8d5?w=500&q=80",
+                    alt: "Hostel"
+                  }
+                ].map((item, idx) => (
+                  <Card key={idx} className="overflow-hidden group hover:shadow-lg transition-shadow border-0">
+                    <div className="aspect-square relative overflow-hidden">
+                      <img
+                        src={item.img}
+                        alt={item.alt}
+                        className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                      />
+                      <div className="absolute inset-0 bg-black/10 group-hover:bg-black/0 transition-colors" />
+                    </div>
+                  </Card>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Trust Strip */}
+      <section className="py-8 bg-white border-y">
+        <div className="container mx-auto px-4 sm:px-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {trustPoints.map((point, idx) => (
+              <div key={idx} className="flex items-center gap-4">
+                <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
+                  <point.icon className="h-6 w-6 text-primary" />
+                </div>
+                <div>
+                  <h3 className="font-semibold text-foreground">{point.title}</h3>
+                  <p className="text-sm text-muted-foreground">{point.desc}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Shop by Category */}
+      <section className="py-16 bg-white">
+        <div className="container mx-auto px-4 sm:px-6">
+          <div className="text-center mb-12">
+            <h2 className="text-4xl md:text-5xl font-extrabold mb-4">
+              Shop Our Top Categories
+            </h2>
+            <p className="text-lg text-muted-foreground">
+              Curated collections for every student need
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
+            {categories.map((cat, idx) => (
+              <Link key={idx} to={cat.link} className="block h-full">
+                <Card className={`overflow-hidden group hover:shadow-xl transition-all duration-300 h-48 md:h-64 ${cat.color} cursor-pointer relative border-0`}>
+                  <CardContent className="p-0 h-full relative">
+                    <div className="absolute inset-0 flex flex-col justify-between p-6 z-10">
+                      <h3 className="text-xl md:text-2xl font-bold text-white drop-shadow-lg">
+                        {cat.name}
+                      </h3>
+                      <div className="w-10 h-10 md:w-12 md:h-12 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center group-hover:scale-110 transition-transform">
+                        <cat.icon className="h-5 w-5 md:h-6 md:w-6 text-white" />
+                      </div>
+                    </div>
+
+                    {/* Image Overlay */}
+                    <div className="absolute inset-0 mix-blend-overlay opacity-20 group-hover:opacity-30 transition-opacity">
+                      <img
+                        src={cat.image}
+                        alt={cat.name}
+                        className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                      />
+                    </div>
+                  </CardContent>
+                </Card>
+              </Link>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Trending Now */}
+      <section className="py-16 bg-gradient-to-br from-orange-50 to-red-50">
+        <div className="container mx-auto px-4 sm:px-6">
+          <div className="text-center mb-12">
+            <div className="inline-flex items-center gap-2 bg-[hsl(var(--trending))] text-white px-4 py-2 rounded-full mb-4">
+              <Flame className="h-5 w-5" />
+              <span className="font-semibold">Hot Deals</span>
+            </div>
+            <h2 className="text-4xl md:text-5xl font-extrabold mb-4">
+              Trending Now
+            </h2>
+            <p className="text-lg text-muted-foreground">
+              Most popular picks by students this week
+            </p>
+          </div>
+          <ProductGrid products={trendingProducts} loading={loading} />
+          <div className="text-center mt-10">
+            <Button size="lg" asChild className="rounded-full px-8">
+              <Link to="/deals">View All Trending</Link>
+            </Button>
+          </div>
+        </div>
+      </section>
+
+      {/* Featured T-Shirts */}
+      <section id="featured-products" className="py-16 bg-white">
+        <div className="container mx-auto px-4 sm:px-6">
+          <div className="text-center mb-12">
+            <h2 className="text-4xl md:text-5xl font-extrabold mb-4">
+              Featured T-Shirts
+            </h2>
+            <p className="text-lg text-muted-foreground">
+              Curated picks for students and budget shoppers
+            </p>
+          </div>
+          <ProductGrid products={featuredProducts} loading={loading} />
+          <div className="text-center mt-10">
+            <Button size="lg" asChild className="rounded-full px-8">
+              <Link to="/deals">See All Deals</Link>
+            </Button>
+          </div>
+        </div>
+      </section>
+
+      {/* Collab CTA */}
+      <section className="py-16 bg-primary text-white">
+        <div className="container mx-auto px-4 sm:px-6">
+          <div className="max-w-3xl mx-auto text-center">
+            <h2 className="text-4xl md:text-5xl font-extrabold mb-6">
+              Want Your Brand on TARAA?
+            </h2>
+            <p className="text-lg mb-8 opacity-90">
+              Collaborate with us for student-focused and budget-friendly promotions. Reach thousands of college students across AP & TS.
+            </p>
+            <Button
+              size="lg"
+              variant="secondary"
+              asChild
+              className="rounded-full px-8 py-6 text-lg font-semibold"
+            >
+              <Link to="/contact">Contact Us</Link>
+            </Button>
+          </div>
+        </div>
+      </section>
+    </Layout>
+  );
+}
