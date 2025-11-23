@@ -18,12 +18,11 @@ export default function About() {
     {
       icon: Shield,
       title: "Safe Shopping",
-      description: "We only partner with trusted, verified platforms. Your security and satisfaction matter to us."
     },
     {
       icon: Zap,
       title: "Transparent",
-      description: "Upfront about our affiliate model. Honesty and transparency are our core values."
+      description: "Upfront and honest. Honesty and transparency are our core values."
     }
   ];
 
@@ -99,7 +98,7 @@ export default function About() {
               What is TARAA?
             </h2>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              A student-focused, budget-friendly affiliate deals platform
+              A student-focused, budget-friendly deals platform
             </p>
           </div>
 
@@ -112,7 +111,7 @@ export default function About() {
                 </div>
                 <h3 className="text-xl md:text-2xl font-bold mb-4">What We Do</h3>
                 <p className="text-muted-foreground leading-relaxed">
-                  We handpick trendy, affordable fashion items—primarily oversized T-shirts—and showcase them to help students and budget shoppers shop smart. We partner with trusted platforms like Meesho and Extrape to bring you the best deals.
+                  We handpick trendy, affordable fashion items—primarily oversized T-shirts—and showcase them to help students and budget shoppers shop smart. We partner with trusted platforms like Meesho to bring you the best deals.
                 </p>
               </CardContent>
             </Card>
@@ -202,7 +201,7 @@ export default function About() {
               <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-6">
                 <Zap className="h-8 w-8 text-primary" />
               </div>
-              <h3 className="text-2xl md:text-3xl font-bold mb-4">Our Revenue Model</h3>
+              <h3 className="text-2xl md:text-3xl font-bold mb-4">Our Promise</h3>
               <p className="text-base md:text-lg text-muted-foreground leading-relaxed">
                 TARAA is dedicated to helping students find the best deals. We curate high-quality, budget-friendly products from trusted platforms to ensure you get the best value for your money.
               </p>

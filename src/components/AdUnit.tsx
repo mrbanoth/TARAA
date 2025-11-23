@@ -1,3 +1,4 @@
+import { Product } from "@/data/products";
 import { useEffect, useState } from "react";
 import { useProducts } from "@/hooks/useProducts";
 
@@ -9,7 +10,7 @@ interface AdUnitProps {
 
 export default function AdUnit({ slotId, format = "auto", className = "" }: AdUnitProps) {
     const { products } = useProducts();
-    const [ad, setAd] = useState<any>(null);
+    const [ad, setAd] = useState<Product | null>(null);
 
     useEffect(() => {
         // Filter for products marked as 'ad_banner'

@@ -6,11 +6,11 @@ export default function Disclaimer() {
   const sections = [
     {
       title: "About TARAA",
-      content: "TARAA is an affiliate marketing and deals discovery platform. We curate and showcase budget-friendly products from trusted third-party e-commerce platforms."
+      content: "TARAA is a deals discovery platform. We curate and showcase budget-friendly products from trusted third-party e-commerce platforms."
     },
     {
       title: "Our Role",
-      content: "We act solely as an intermediary between you and our partner platforms (such as Meesho, Extrape, etc.). We display product information and provide affiliate links to help you discover deals."
+      content: "We act solely as an intermediary between you and our partner platforms (such as Meesho, etc.). We display product information and provide links to help you discover deals."
     },
     {
       title: "No Direct Transactions",
@@ -25,7 +25,7 @@ export default function Disclaimer() {
       content: "While we strive to provide accurate product information, descriptions, prices, and availability are subject to change and are ultimately controlled by our partner platforms. Always verify details on the seller's website."
     },
     {
-      title: "Affiliate Disclosure",
+      title: "Disclosure",
       content: "TARAA curates deals from various e-commerce platforms. We are not responsible for the products, shipping, or returns. Please check the respective platform's policies."
     },
     {
