@@ -103,8 +103,8 @@ export default function AdminDashboard() {
             });
 
             toast.success(`${newImages.length} images uploaded!`);
-        } catch (error: any) {
-            toast.error('Upload failed: ' + error.message);
+        } catch (error: unknown) {
+            toast.error('Upload failed: ' + (error instanceof Error ? error.message : 'Unknown error'));
         } finally {
             setUploading(false);
             if (fileInputRef.current) fileInputRef.current.value = '';
@@ -196,8 +196,8 @@ export default function AdminDashboard() {
 
             setTimeout(() => window.location.reload(), 1000);
 
-        } catch (err: any) {
-            toast.error("Failed to save product: " + err.message);
+        } catch (error: unknown) {
+            toast.error("Failed to save product: " + (error instanceof Error ? error.message : 'Unknown error'));
         } finally {
             setSaving(false);
         }
@@ -214,8 +214,8 @@ export default function AdminDashboard() {
             toast.success("Product deleted successfully");
             // Optimistic update or reload
             setTimeout(() => window.location.reload(), 500);
-        } catch (err: any) {
-            toast.error("Failed to delete: " + err.message);
+        } catch (error: unknown) {
+            toast.error("Failed to delete: " + (error instanceof Error ? error.message : 'Unknown error'));
         }
     };
 

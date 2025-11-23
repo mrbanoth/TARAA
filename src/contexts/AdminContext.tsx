@@ -48,9 +48,9 @@ export function AdminProvider({ children }: { children: ReactNode }) {
             if (error) throw error;
             toast.success("OTP sent to your mobile!");
             return true;
-        } catch (error: any) {
+        } catch (error: unknown) {
             // Silent error handling for security
-            toast.error(error.message);
+            toast.error(error instanceof Error ? error.message : 'Login failed');
             return false;
         }
     };
@@ -76,8 +76,8 @@ export function AdminProvider({ children }: { children: ReactNode }) {
 
             toast.error("Verification failed: No session created.");
             return false;
-        } catch (error: any) {
-            toast.error(error.message || "Failed to verify OTP");
+        } catch (error: unknown) {
+            toast.error(error instanceof Error ? error.message : "Failed to verify OTP");
             return false;
         }
     };

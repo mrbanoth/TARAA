@@ -63,7 +63,7 @@ export default function Contact() {
       setFormData({ name: "", email: "", message: "" });
 
       setTimeout(() => setSubmitted(false), 5000);
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error("Email Error:", error);
       toast.error("Failed to send message. Please try again.");
     } finally {

@@ -27,10 +27,11 @@ export function useProducts() {
                 if (error) throw error;
 
                 setProducts(data || []);
-            } catch (err: any) {
+            } catch (err: unknown) {
                 // Silent error handling for security
-                setError(err.message);
-                toast.error('Failed to load products');
+                const message = err instanceof Error ? err.message : 'Failed to load products';
+                setError(message);
+                toast.error(message);
             } finally {
                 setLoading(false);
             }
