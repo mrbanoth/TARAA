@@ -5,6 +5,9 @@ import { Card, CardContent } from "@/components/ui/card";
 import Layout from "@/components/Layout";
 import ProductGrid from "@/components/ProductGrid";
 import { useProducts } from "@/hooks/useProducts";
+import BentoGrid from "@/components/BentoGrid";
+import HotDeals from "@/components/HotDeals";
+import Newsletter from "@/components/Newsletter";
 
 export default function Index() {
   const { products, loading } = useProducts();
@@ -189,36 +192,59 @@ export default function Index() {
         </div>
       </section>
 
-      {/* Trending Now */}
-      <section className="py-16 bg-gradient-to-br from-orange-50 to-red-50">
+      {/* Bento Section: Hot Deals, Trending Now, Most Popular Picks */}
+      <section className="py-16 bg-white">
         <div className="container mx-auto px-4 sm:px-6">
-          <div className="text-center mb-12">
-            <div className="inline-flex items-center gap-2 bg-[hsl(var(--trending))] text-white px-4 py-2 rounded-full mb-4">
-              <Flame className="h-5 w-5" />
-              <span className="font-semibold">Hot Deals</span>
-            </div>
-            <h2 className="text-4xl md:text-5xl font-extrabold mb-4">
-              Trending Now
-            </h2>
-            <p className="text-lg text-muted-foreground">
-              Most popular picks by students this week
-            </p>
-          </div>
-          <ProductGrid products={trendingProducts} loading={loading} />
-          <div className="text-center mt-10">
-            <Button size="lg" asChild className="rounded-full px-8">
-              <Link to="/deals">View All Trending</Link>
-            </Button>
-          </div>
+          {/* Compute randomised groups */}
+          {(() => {
+            const shuffled = [...products].sort(() => Math.random() - 0.5);
+            const hotDeals = shuffled.slice(0, 6);
+            const trendingDeals = shuffled.slice(6, 12);
+            const popularDeals = shuffled.slice(12, 18);
+            const hasAny = hotDeals.length || trendingDeals.length || popularDeals.length;
+            return (
+              <>
+                {hotDeals.length > 0 && (
+                  <>
+                    <h2 className="text-4xl md:text-5xl font-extrabold text-center mb-6">
+                      Hot Deals
+                    </h2>
+                    <HotDeals products={hotDeals} />
+                  </>
+                )}
+                {trendingDeals.length > 0 && (
+                  <>
+                    <h2 className="text-4xl md:text-5xl font-extrabold text-center my-8">
+                      Trending Now
+                    </h2>
+                    <BentoGrid products={trendingDeals} />
+                  </>
+                )}
+                {popularDeals.length > 0 && (
+                  <>
+                    <h2 className="text-4xl md:text-5xl font-extrabold text-center my-8">
+                      Most Popular Picks by Students This Week
+                    </h2>
+                    <BentoGrid products={popularDeals} />
+                  </>
+                )}
+                {!hasAny && (
+                  <p className="text-center text-muted-foreground mt-12">
+                    No products found.
+                  </p>
+                )}
+              </>
+            );
+          })()}
         </div>
       </section>
 
-      {/* Featured T-Shirts */}
+      {/* Featured T‑Shirts */}
       <section id="featured-products" className="py-16 bg-white">
         <div className="container mx-auto px-4 sm:px-6">
           <div className="text-center mb-12">
             <h2 className="text-4xl md:text-5xl font-extrabold mb-4">
-              Featured T-Shirts
+              Featured T‑Shirts
             </h2>
             <p className="text-lg text-muted-foreground">
               Curated picks for students and budget shoppers
@@ -233,8 +259,11 @@ export default function Index() {
         </div>
       </section>
 
+      {/* Newsletter Section */}
+      <Newsletter />
+
       {/* Collab CTA */}
-      <section className="py-16 bg-primary text-white">
+      < section className="py-16 bg-primary text-white" >
         <div className="container mx-auto px-4 sm:px-6">
           <div className="max-w-3xl mx-auto text-center">
             <h2 className="text-4xl md:text-5xl font-extrabold mb-6">
