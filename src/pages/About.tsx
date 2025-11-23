@@ -2,6 +2,7 @@ import Layout from "@/components/Layout";
 import { Card, CardContent } from "@/components/ui/card";
 import { ShoppingBag, Target, Users, Shield, Zap, Heart, Sparkles, TrendingUp } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
+import { useEffect, useState, useRef } from "react";
 
 export default function About() {
   const features = [
@@ -27,11 +28,64 @@ export default function About() {
   ];
 
   const stats = [
-    { number: "20+", label: "Curated Products", icon: ShoppingBag },
-    { number: "100%", label: "Budget Friendly", icon: Heart },
-    { number: "₹399", label: "Max Price Point", icon: TrendingUp },
-    { number: "24/7", label: "Always Available", icon: Sparkles }
+    { number: 20, suffix: "+", label: "Curated Products", icon: ShoppingBag },
+    { number: 100, suffix: "%", label: "Budget Friendly", icon: Heart },
+    { number: 399, prefix: "₹", label: "Max Price Point", icon: TrendingUp },
+    { number: 24, suffix: "/7", label: "Always Available", icon: Sparkles }
   ];
+
+  const [countedStats, setCountedStats] = useState(stats.map(stat => 0));
+  const statsRef = useRef<HTMLDivElement>(null);
+  const hasAnimated = useRef(false);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting && !hasAnimated.current) {
+            hasAnimated.current = true;
+            
+            stats.forEach((stat, index) => {
+              const duration = 2000; // 2 seconds
+              const stepTime = 50; // update every 50ms
+              const steps = duration / stepTime;
+              const valuePerStep = stat.number / steps;
+              let currentStep = 0;
+              
+              const counter = setInterval(() => {
+                currentStep++;
+                const currentValue = Math.min(
+                  Math.ceil(currentStep * valuePerStep), 
+                  stat.number
+                );
+                
+                setCountedStats(prev => {
+                  const newStats = [...prev];
+                  newStats[index] = currentValue;
+                  return newStats;
+                });
+                
+                if (currentStep >= steps) {
+                  clearInterval(counter);
+                }
+              }, stepTime);
+            });
+          }
+        });
+      },
+      { threshold: 0.3, triggerOnce: true }
+    );
+
+    if (statsRef.current) {
+      observer.observe(statsRef.current);
+    }
+
+    return () => {
+      if (statsRef.current) {
+        observer.unobserve(statsRef.current);
+      }
+    };
+  }, []);
 
   const howItWorks = [
     {
@@ -53,19 +107,38 @@ export default function About() {
 
   return (
     <Layout>
-      {/* Hero Section */}
-      <div className="bg-gradient-to-br from-primary/10 via-accent/10 to-background py-16 md:py-24">
-        <div className="container mx-auto px-4 sm:px-6 text-center">
-          <Badge variant="secondary" className="mb-4 bg-primary/10 text-primary px-4 py-1.5 text-sm font-semibold">
-            About TARAA
-          </Badge>
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold mb-6 max-w-4xl mx-auto">
-            Your Trusted Deals Platform for
-            <span className="block text-primary mt-2">Students & Budget Shoppers</span>
-          </h1>
-          <p className="text-lg md:text-xl text-muted-foreground max-w-3xl mx-auto">
-            We curate the best affordable fashion and essentials for college life. No gimmicks, just genuine deals.
-          </p>
+      {/* Video Hero Section */}
+      <div className="relative w-full h-[70vh] min-h-[500px] overflow-hidden bg-black">
+        {/* Video Background */}
+        <video 
+          autoPlay 
+          loop 
+          muted 
+          playsInline 
+          className="absolute inset-0 w-full h-full object-cover opacity-90"
+        >
+          <source src="/vid1.mp4" type="video/mp4" />
+          Your browser does not support the video tag.
+        </video>
+        
+        {/* Dark Overlay */}
+        <div className="absolute inset-0 bg-black/50"></div>
+        
+        {/* Content */}
+        <div className="relative h-full flex flex-col justify-center items-center text-center px-4 sm:px-8 py-16 text-white">
+          <div className="max-w-3xl mx-auto">
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6">
+              About TARAA
+            </h1>
+            <h2 className="text-2xl md:text-3xl font-semibold mb-6">
+              Your Trusted Deals Platform for<br className="hidden sm:block" />
+              <span className="text-primary-300">Students & Budget Shoppers</span>
+            </h2>
+            <p className="text-lg md:text-xl mb-8 text-gray-200 max-w-2xl mx-auto">
+              We curate the best affordable fashion and essentials for college life. 
+              No gimmicks, just genuine deals.
+            </p>
+          </div>
         </div>
       </div>
 
@@ -74,12 +147,12 @@ export default function About() {
         <div className="container mx-auto px-4 sm:px-6 py-12 md:py-16">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-8">
             {stats.map((stat, idx) => (
-              <div key={idx} className="text-center group">
+              <div key={idx} className="text-center group" ref={idx === 0 ? statsRef : undefined}>
                 <div className="inline-flex items-center justify-center w-12 h-12 md:w-14 md:h-14 rounded-full bg-primary/10 mb-3 group-hover:bg-primary/20 transition-colors">
                   <stat.icon className="h-6 w-6 md:h-7 md:w-7 text-primary" />
                 </div>
                 <div className="text-3xl md:text-4xl lg:text-5xl font-extrabold text-primary mb-2">
-                  {stat.number}
+                  {stat.prefix || ''}{countedStats[idx] || 0}{stat.suffix || ''}
                 </div>
                 <div className="text-sm md:text-base text-muted-foreground font-medium">
                   {stat.label}
