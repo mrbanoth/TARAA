@@ -242,7 +242,7 @@ export default function Index() {
                 )}
                 {trendingDeals.length > 0 && (
                   <>
-                    <h2 className="text-4xl md:text-5xl font-extrabold text-center my-8">
+                    <h2 className="text-4xl md:text-5xl font-extrabold text-center mt-12 mb-8">
                       Trending Now
                     </h2>
                     <BentoGrid products={trendingDeals} />

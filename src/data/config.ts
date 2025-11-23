@@ -27,9 +27,20 @@ export const PRICE_RANGES = [
 ] as const;
 
 // ====================================
-// AVAILABLE SIZES
+// AVAILABLE SIZES (Only for clothing)
 // ====================================
 export const AVAILABLE_SIZES = ["M", "L", "XL", "XXL"] as const;
+
+// ====================================
+// CLOTHING CATEGORIES
+// Categories that support size filtering
+// ====================================
+export const CLOTHING_CATEGORIES = ["tshirt", "shirt"] as const;
+
+// Helper function to check if a category supports sizes
+export const isSizableCategory = (category: string): boolean => {
+    return CLOTHING_CATEGORIES.includes(category as any);
+};
 
 // ====================================
 // TRENDING THRESHOLD

@@ -44,6 +44,7 @@ import {
   AVAILABLE_SIZES,
   isPriceInRange,
   getCategoryLabel,
+  isSizableCategory,
 } from "@/data/config";
 
 // ====================================
@@ -226,7 +227,7 @@ export default function Deals() {
                 </div>
 
                 {/* Mobile Sizes - only for clothing (T-shirts & Shirts) */}
-                {(filters.category === "tshirt" || filters.category === "shirt") && (
+                {isSizableCategory(filters.category) && (
                   <div>
                     <h3 className="font-semibold mb-3">Size</h3>
                     <div className="flex flex-wrap gap-2">
@@ -356,7 +357,7 @@ export default function Deals() {
               </div>
 
               {/* Size Row - only show for clothing (T-shirts & Shirts) */}
-              {(filters.category === "tshirt" || filters.category === "shirt") && (
+              {isSizableCategory(filters.category) && (
                 <div className="flex items-start gap-4">
                   <div className="w-24 flex-shrink-0 pt-1">
                     <span className="text-sm font-bold text-foreground">Size</span>
