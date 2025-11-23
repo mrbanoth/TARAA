@@ -12,6 +12,8 @@ import ProductDetails from "./pages/ProductDetails";
 import About from "./pages/About";
 import Contact from "./pages/Contact";
 import Disclaimer from "./pages/Disclaimer";
+import Men from "./pages/Men";
+import Women from "./pages/Women";
 import AdminLogin from "./pages/admin/Login";
 import AdminDashboard from "./pages/admin/Dashboard";
 import { AdminProvider } from "./contexts/AdminContext";
@@ -34,6 +36,8 @@ const App = () => (
             <Route path="/deals" element={<Deals />} />
             <Route path="/product/:id" element={<ProductDetails />} />
             <Route path="/saved" element={<Saved />} />
+            <Route path="/men" element={<Men />} />
+            <Route path="/women" element={<Women />} />
             <Route path="/about" element={<About />} />
             <Route path="/contact" element={<Contact />} />
             <Route path="/legal/disclaimer" element={<Disclaimer />} />

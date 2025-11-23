@@ -56,7 +56,7 @@ export default function ProductCarousel({ title, products }: ProductCarouselProp
                 style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
             >
                 {products.map((product) => (
-                    <div key={product.id} className="min-w-[280px] md:min-w-[300px] snap-start">
+                    <div key={product.id} className="min-w-[280px] max-w-[280px] md:min-w-[300px] md:max-w-[300px] snap-start flex-shrink-0">
                         <ProductCard product={product} />
                     </div>
                 ))}

@@ -1,4 +1,5 @@
-export type Category = "tshirt" | "bag" | "tech" | "hostel" | "shoes" | "other" | "ad_banner";
+export type Category = "tshirt" | "shirt" | "bag" | "tech" | "hostel" | "shoes" | "watch" | "books" | "accessories" | "other" | "ad_banner";
+export type Gender = "men" | "women" | "unisex";
 
 export interface Product {
   id: string;
@@ -6,6 +7,7 @@ export interface Product {
   description: string;
   price: number;
   category: Category;
+  gender?: Gender;
   imageUrl: string;
   images?: string[];
   affiliateUrl: string;

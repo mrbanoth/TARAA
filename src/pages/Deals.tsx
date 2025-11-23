@@ -16,7 +16,7 @@
  */
 
 import { useState, useMemo, useEffect } from "react";
-import { useSearchParams } from "react-router-dom";
+import { useSearchParams, Link } from "react-router-dom";
 import Layout from "@/components/Layout";
 import ProductGrid from "@/components/ProductGrid";
 import ProductCarousel from "@/components/ProductCarousel";
@@ -225,8 +225,8 @@ export default function Deals() {
                   </div>
                 </div>
 
-                {/* Mobile Sizes - only for T-shirts */}
-                {(filters.category === "all" || filters.category === "tshirt") && (
+                {/* Mobile Sizes - only for clothing (T-shirts & Shirts) */}
+                {(filters.category === "tshirt" || filters.category === "shirt") && (
                   <div>
                     <h3 className="font-semibold mb-3">Size</h3>
                     <div className="flex flex-wrap gap-2">
@@ -281,6 +281,31 @@ export default function Deals() {
               {/* Divider */}
               <div className="border-t border-border" />
 
+              {/* Gender Icons Row - Navigate to Men/Women pages */}
+              <div className="flex items-center gap-4">
+                <div className="w-24 flex-shrink-0">
+                  <span className="text-sm font-bold text-foreground">Shop By</span>
+                </div>
+                <div className="flex gap-3">
+                  <Link to="/men">
+                    <Button variant="outline" className="gap-2 hover:bg-primary hover:text-primary-foreground transition-colors">
+                      <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                      </svg>
+                      Men
+                    </Button>
+                  </Link>
+                  <Link to="/women">
+                    <Button variant="outline" className="gap-2 hover:bg-primary hover:text-primary-foreground transition-colors">
+                      <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                      </svg>
+                      Women
+                    </Button>
+                  </Link>
+                </div>
+              </div>
+
               {/* Category Row */}
               <div className="flex items-start gap-4">
                 <div className="w-24 flex-shrink-0 pt-1">
@@ -322,8 +347,8 @@ export default function Deals() {
                 </div>
               </div>
 
-              {/* Size Row - only show for T-shirts */}
-              {(filters.category === "all" || filters.category === "tshirt") && (
+              {/* Size Row - only show for clothing (T-shirts & Shirts) */}
+              {(filters.category === "tshirt" || filters.category === "shirt") && (
                 <div className="flex items-start gap-4">
                   <div className="w-24 flex-shrink-0 pt-1">
                     <span className="text-sm font-bold text-foreground">Size</span>
@@ -399,25 +424,38 @@ export default function Deals() {
           </div>
         )}
 
-        {/* T-Shirt Carousel (Only show when no filters or T-shirt category selected) */}
-        {(!hasActiveFilters || filters.category === "tshirt") && (
-          <ProductCarousel
-            title="Trending T-Shirts"
-            products={products.filter(p => p.category === "tshirt").slice(0, 10)}
-          />
-        )}
+        {/* Dynamic Category Carousels - Show all categories */}
+        {CATEGORIES.filter(cat => cat.value !== "all").map((cat) => {
+          // Show only the selected category when filters are active
+          if (hasActiveFilters && filters.category !== cat.value) return null;
 
-        {/* Results Count */}
-        <div className="mb-6">
-          <p className="text-sm text-muted-foreground">
-            Showing <span className="font-bold text-foreground">{filteredProducts.length}</span> of <span className="font-bold text-foreground">{products.length}</span> products
-          </p>
-        </div>
+          const catProducts = products.filter(p => p.category === cat.value);
+          if (catProducts.length === 0) return null;
 
-        {/* Products Grid or Empty State */}
-        {loading || filteredProducts.length > 0 ? (
-          <ProductGrid products={filteredProducts} loading={loading} />
-        ) : (
+          const titleMap: Record<string, string> = {
+            tshirt: "Trending T-Shirts",
+            shirt: "Popular Shirts",
+            shoes: "Trending Shoes",
+            watch: "Best Selling Watches",
+            bag: "Student Bags",
+            tech: "Top Tech Gadgets",
+            hostel: "Hostel Essentials",
+            books: "Best Selling Books",
+            accessories: "Must-Have Accessories",
+          };
+          const title = titleMap[cat.value] || `Trending ${cat.label}`;
+
+          return (
+            <ProductCarousel
+              key={cat.value}
+              title={title}
+              products={catProducts.slice(0, 10)}
+            />
+          );
+        })}
+
+        {/* Empty State - Only show when filters are active but no results */}
+        {hasActiveFilters && filteredProducts.length === 0 && (
           <Card className="p-12 text-center">
             <div className="flex flex-col items-center gap-4">
               <div className="w-16 h-16 rounded-full bg-muted flex items-center justify-center">

@@ -6,9 +6,10 @@ import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import {
     LogOut, Plus, Image as ImageIcon, Sparkles,
-    Save, Copy, Check, Package, Loader2, Upload, X, Trash2
+    Save, Copy, Check, Package, Loader2, Upload, X, Trash2, Menu
 } from "lucide-react";
 import { CATEGORIES } from "@/data/config";
 import { useProducts } from "@/hooks/useProducts";
@@ -22,6 +23,7 @@ export default function AdminDashboard() {
     const [activeTab, setActiveTab] = useState("add");
     const [saving, setSaving] = useState(false);
     const [uploading, setUploading] = useState(false);
+    const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
     // Form State
     const [extrapeText, setExtrapeText] = useState("");
@@ -221,29 +223,102 @@ export default function AdminDashboard() {
     };
 
     return (
-        <div className="min-h-screen bg-slate-50">
+        <div className="min-h-screen bg-slate-50 overflow-x-hidden">
             {/* Header */}
-            <header className="bg-white border-b sticky top-0 z-10 shadow-sm">
-                <div className="container mx-auto px-4 h-16 flex items-center justify-between">
-                    <div className="flex items-center gap-3">
+            <header className="bg-white border-b sticky top-0 z-20 shadow-sm">
+                <div className="w-full max-w-7xl mx-auto px-3 sm:px-4 h-16 flex items-center justify-between">
+                    <div className="flex items-center gap-2 sm:gap-3 min-w-0">
+                        {/* Mobile Hamburger Menu */}
+                        <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
+                            <SheetTrigger asChild className="md:hidden">
+                                <Button variant="ghost" size="icon" className="flex-shrink-0">
+                                    <Menu className="h-5 w-5" />
+                                </Button>
+                            </SheetTrigger>
+                            <SheetContent side="left" className="w-[280px] sm:w-[320px]" aria-describedby="admin-menu-description">
+                                <SheetHeader>
+                                    <SheetTitle className="text-left">Admin Menu</SheetTitle>
+                                    <p id="admin-menu-description" className="sr-only">Navigate between admin sections</p>
+                                </SheetHeader>
+                                <nav className="flex flex-col gap-2 mt-6">
+                                    <Button
+                                        variant={activeTab === "add" ? "default" : "ghost"}
+                                        className="justify-start h-12 text-base"
+                                        onClick={() => {
+                                            setActiveTab("add");
+                                            setMobileMenuOpen(false);
+                                        }}
+                                    >
+                                        <Plus className="h-5 w-5 mr-3" />
+                                        Add Product
+                                    </Button>
+                                    <Button
+                                        variant={activeTab === "list" ? "default" : "ghost"}
+                                        className="justify-start h-12 text-base"
+                                        onClick={() => {
+                                            setActiveTab("list");
+                                            setMobileMenuOpen(false);
+                                        }}
+                                    >
+                                        <Package className="h-5 w-5 mr-3" />
+                                        All Products
+                                    </Button>
+                                    <Button
+                                        variant={activeTab === "ads" ? "default" : "ghost"}
+                                        className="justify-start h-12 text-base"
+                                        onClick={() => {
+                                            setActiveTab("ads");
+                                            setMobileMenuOpen(false);
+                                        }}
+                                    >
+                                        <Sparkles className="h-5 w-5 mr-3" />
+                                        Manage Ads
+                                    </Button>
+                                    <Button
+                                        variant={activeTab === "testimonials" ? "default" : "ghost"}
+                                        className="justify-start h-12 text-base"
+                                        onClick={() => {
+                                            setActiveTab("testimonials");
+                                            setMobileMenuOpen(false);
+                                        }}
+                                    >
+                                        <Check className="h-5 w-5 mr-3" />
+                                        Testimonials
+                                    </Button>
+
+                                    <div className="border-t my-4" />
+
+                                    <Button
+                                        variant="ghost"
+                                        className="justify-start h-12 text-base text-red-600 hover:text-red-700 hover:bg-red-50"
+                                        onClick={logout}
+                                    >
+                                        <LogOut className="h-5 w-5 mr-3" />
+                                        Logout
+                                    </Button>
+                                </nav>
+                            </SheetContent>
+                        </Sheet>
+
                         <img
                             src="/logo.svg"
                             alt="TARAA Logo"
-                            className="h-8 w-auto"
+                            className="h-7 sm:h-8 w-auto flex-shrink-0"
                         />
-                        <div className="h-6 w-px bg-border" />
-                        <span className="text-sm font-medium text-muted-foreground">Admin Dashboard</span>
+                        <div className="h-6 w-px bg-border hidden sm:block" />
+                        <span className="text-xs sm:text-sm font-medium text-muted-foreground hidden sm:block truncate">Admin Dashboard</span>
                     </div>
-                    <Button variant="ghost" size="sm" onClick={logout} className="text-red-600 hover:text-red-700 hover:bg-red-50">
+                    <Button variant="ghost" size="sm" onClick={logout} className="hidden md:flex text-red-600 hover:text-red-700 hover:bg-red-50 flex-shrink-0">
                         <LogOut className="h-4 w-4 mr-2" />
                         Logout
                     </Button>
                 </div>
             </header>
 
-            <main className="container mx-auto px-4 py-8">
-                <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-8">
-                    <TabsList className="grid w-full grid-cols-4 max-w-2xl mx-auto p-1 bg-slate-200/50">
+            <main className="w-full max-w-7xl mx-auto px-3 sm:px-4 py-3 sm:py-4 lg:py-8">
+                <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-3 sm:space-y-4 lg:space-y-8">
+                    {/* Desktop Tabs */}
+                    <TabsList className="hidden md:grid w-full grid-cols-4 max-w-2xl mx-auto p-1 bg-slate-200/50">
                         <TabsTrigger value="add" className="data-[state=active]:bg-white data-[state=active]:shadow-sm">Add Product</TabsTrigger>
                         <TabsTrigger value="list" className="data-[state=active]:bg-white data-[state=active]:shadow-sm">All Products</TabsTrigger>
                         <TabsTrigger value="ads" className="data-[state=active]:bg-white data-[state=active]:shadow-sm">Manage Ads</TabsTrigger>
@@ -526,24 +601,27 @@ export default function AdminDashboard() {
                     </TabsContent>
 
                     {/* LIST TAB */}
-                    <TabsContent value="list">
-                        <Card className="border-0 shadow-md">
-                            <CardHeader>
-                                <CardTitle>Current Products ({products.length})</CardTitle>
-                            </CardHeader>
-                            <CardContent>
-                                <div className="grid gap-4">
-                                    {products.length === 0 ? (
-                                        <div className="text-center py-12">
-                                            <div className="w-16 h-16 bg-slate-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                                                <Package className="h-8 w-8 text-slate-400" />
-                                            </div>
-                                            <p className="text-muted-foreground">No products found. Start adding some!</p>
-                                        </div>
-                                    ) : (
-                                        products.map(p => (
-                                            <div key={p.id} className="flex items-center gap-4 p-4 border rounded-lg bg-white hover:shadow-sm transition-shadow">
-                                                <div className="w-16 h-16 rounded-md overflow-hidden bg-slate-100 flex-shrink-0 border">
+                    <TabsContent value="list" className="max-w-3xl mx-auto">
+                        <div className="mb-6">
+                            <h2 className="text-2xl font-bold">Current Products ({products.length})</h2>
+                        </div>
+
+                        {products.length === 0 ? (
+                            <Card className="border-0 shadow-sm">
+                                <CardContent className="text-center py-12">
+                                    <div className="w-16 h-16 bg-slate-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                                        <Package className="h-8 w-8 text-slate-400" />
+                                    </div>
+                                    <p className="text-muted-foreground">No products found. Start adding some!</p>
+                                </CardContent>
+                            </Card>
+                        ) : (
+                            <div className="grid gap-4">
+                                {products.map(p => (
+                                    <Card key={p.id} className="border-0 shadow-sm hover:shadow-md transition-shadow overflow-hidden">
+                                        <CardContent className="p-4">
+                                            <div className="flex items-center gap-4">
+                                                <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-md overflow-hidden bg-slate-100 flex-shrink-0 border">
                                                     {p.imageUrl ? (
                                                         <img src={p.imageUrl} alt={p.name} className="w-full h-full object-cover" onError={(e) => (e.currentTarget.src = "https://placehold.co/100?text=Error")} />
                                                     ) : (
@@ -552,27 +630,27 @@ export default function AdminDashboard() {
                                                         </div>
                                                     )}
                                                 </div>
-                                                <div className="flex-1">
-                                                    <h4 className="font-bold text-lg">{p.name}</h4>
-                                                    <div className="flex items-center gap-2 text-sm text-muted-foreground mt-1">
-                                                        <span className="font-medium text-slate-900">₹{p.price}</span>
-                                                        <span>•</span>
-                                                        <span className="capitalize">{p.category}</span>
-                                                        <span>•</span>
-                                                        <span className="capitalize px-2 py-0.5 bg-slate-100 rounded text-xs">{p.platform || "meesho"}</span>
+                                                <div className="flex-1 min-w-0">
+                                                    <h4 className="font-bold text-base sm:text-lg truncate">{p.name}</h4>
+                                                    <div className="flex flex-wrap items-center gap-2 text-sm text-muted-foreground mt-1">
+                                                        <span className="font-semibold text-slate-900">₹{p.price}</span>
+                                                        <span className="hidden sm:inline">•</span>
+                                                        <span className="capitalize text-xs sm:text-sm">{p.category}</span>
+                                                        <span className="hidden sm:inline">•</span>
+                                                        <span className="capitalize px-2 py-0.5 bg-blue-50 text-blue-700 rounded text-xs font-medium">{p.platform || "meesho"}</span>
                                                     </div>
                                                 </div>
-                                                <div className="flex gap-2">
+                                                <div className="flex-shrink-0">
                                                     <Button variant="ghost" size="icon" className="text-red-400 hover:text-red-600 hover:bg-red-50" onClick={() => handleDelete(p.id)}>
                                                         <Trash2 className="h-4 w-4" />
                                                     </Button>
                                                 </div>
                                             </div>
-                                        ))
-                                    )}
-                                </div>
-                            </CardContent>
-                        </Card>
+                                        </CardContent>
+                                    </Card>
+                                ))}
+                            </div>
+                        )}
                     </TabsContent>
                 </Tabs>
             </main>
