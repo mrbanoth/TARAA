@@ -7,8 +7,7 @@ import ProductGrid from "@/components/ProductGrid";
 import { useProducts } from "@/hooks/useProducts";
 import BentoGrid from "@/components/BentoGrid";
 import HotDeals from "@/components/HotDeals";
-// import Newsletter from "@/components/Newsletter";
-import Testimonials from "@/components/Testimonials";
+import TestimonialsSection from "@/components/TestimonialsSection";
 
 export default function Index() {
   const { products, loading } = useProducts();
@@ -265,7 +264,7 @@ export default function Index() {
 
 
       {/* Testimonials Section */}
-      <Testimonials />
+      <TestimonialsSection />
 
       {/* Collab CTA */}
       < section className="py-16 bg-primary text-white" >
