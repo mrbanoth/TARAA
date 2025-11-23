@@ -9,6 +9,8 @@ import BentoGrid from "@/components/BentoGrid";
 import HotDeals from "@/components/HotDeals";
 import TestimonialsSection from "@/components/TestimonialsSection";
 
+import SEO from "@/components/SEO";
+
 export default function Index() {
   const { products, loading } = useProducts();
 
@@ -61,6 +63,10 @@ export default function Index() {
 
   return (
     <Layout>
+      <SEO
+        title="Student Deals & Discounts | Save Money on Fashion, Tech & More"
+        description="TARAA is the #1 platform for Indian students to find exclusive deals, discounts, and offers on fashion, electronics, books, and more. Save big today!"
+      />
       {/* Hero Section - Reduced padding for tighter layout */}
       <section className="bg-gradient-to-br from-blue-50 via-green-50 to-yellow-50 py-8 md:py-12 lg:py-16">
         <div className="container mx-auto px-4 sm:px-6">

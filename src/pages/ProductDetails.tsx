@@ -13,6 +13,7 @@ import StarRating from "@/components/StarRating";
 import AddReviewForm from "@/components/AddReviewForm";
 import ReviewsList from "@/components/ReviewsList";
 import { useRatings } from "@/hooks/useRatings";
+import SEO from "@/components/SEO";
 
 export default function ProductDetails() {
   const { id } = useParams<{ id: string }>();
@@ -69,6 +70,13 @@ export default function ProductDetails() {
 
   return (
     <Layout>
+      {product && (
+        <SEO
+          title={`${product.name} - Best Price & Deals`}
+          description={`Buy ${product.name} at the best price. ${product.description.substring(0, 150)}...`}
+          image={product.imageUrl}
+        />
+      )}
       <div className="container mx-auto px-4 sm:px-6 py-8">
         {/* Back Button */}
         <Button variant="ghost" asChild className="mb-6">
