@@ -227,7 +227,7 @@ export default function Index() {
           {(() => {
             const shuffled = [...products].sort(() => Math.random() - 0.5);
             const hotDeals = shuffled.slice(0, 6);
-            const trendingDeals = shuffled.slice(6, 12);
+            const trendingDeals = shuffled.slice(0, 4); // Show 4 random products
             const popularDeals = shuffled.slice(12, 18);
             const hasAny = hotDeals.length || trendingDeals.length || popularDeals.length;
             return (
@@ -264,26 +264,6 @@ export default function Index() {
               </>
             );
           })()}
-        </div>
-      </section>
-
-      {/* Featured T‑Shirts */}
-      <section id="featured-products" className="py-16 bg-white">
-        <div className="container mx-auto px-4 sm:px-6">
-          <div className="text-center mb-12">
-            <h2 className="text-4xl md:text-5xl font-extrabold mb-4">
-              Featured T‑Shirts
-            </h2>
-            <p className="text-lg text-muted-foreground">
-              Curated picks for students and budget shoppers
-            </p>
-          </div>
-          <ProductGrid products={featuredProducts} loading={loading} />
-          <div className="text-center mt-10">
-            <Button size="lg" asChild className="rounded-full px-8">
-              <Link to="/deals">See All Deals</Link>
-            </Button>
-          </div>
         </div>
       </section>
 
