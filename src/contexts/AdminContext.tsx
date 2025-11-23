@@ -22,7 +22,8 @@ export function AdminProvider({ children }: { children: ReactNode }) {
     useEffect(() => {
         // Check active session on mount
         // Supabase automatically stores session in localStorage
-        // Admin stays logged in until they logout or clear browser data
+        // Admin stays logged in until they manually logout or clear browser data
+        // NO AUTO-LOGOUT: Session persists across page refreshes and browser restarts
         supabase.auth.getSession().then(({ data: { session } }) => {
             setSession(session);
             setLoading(false);
