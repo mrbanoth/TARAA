@@ -13,15 +13,15 @@ export default function Women() {
   const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState("");
 
-  // Filter products for Women (gender="women" or gender="unisex")
+  // Filter products for Women (ONLY gender="women")
   const womenProducts = products.filter((product) => {
-    const gender = product.gender || "unisex"; // Default to unisex if not set
-    
-    // Only show women's and unisex products
-    if (gender !== "women" && gender !== "unisex") {
+    const gender = product.gender || "unisex";
+
+    // ONLY show women's products (strict filtering)
+    if (gender !== "women") {
       return false;
     }
-    
+
     // Filter by search query
     if (!searchQuery) return true;
     const query = searchQuery.toLowerCase();
@@ -83,9 +83,8 @@ export default function Women() {
               return (
                 <Card
                   key={product.id}
-                  className={`group relative overflow-hidden cursor-pointer transition-all hover:shadow-xl hover:scale-[1.02] ${
-                    isLarge ? "md:col-span-2 md:row-span-2" : isTall ? "row-span-2" : ""
-                  }`}
+                  className={`group relative overflow-hidden cursor-pointer transition-all hover:shadow-xl hover:scale-[1.02] ${isLarge ? "md:col-span-2 md:row-span-2" : isTall ? "row-span-2" : ""
+                    }`}
                   onClick={() => window.open(product.affiliateUrl, "_blank")}
                 >
                   {/* Product Image */}

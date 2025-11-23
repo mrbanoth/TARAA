@@ -8,17 +8,17 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ArrowLeft, ExternalLink, Search } from "lucide-react";
 
-export default function Men() {
+export default function Unisex() {
     const { products, loading } = useProducts();
     const navigate = useNavigate();
     const [searchQuery, setSearchQuery] = useState("");
 
-    // Filter products for Men (ONLY gender="men")
-    const menProducts = products.filter((product) => {
+    // Filter products for Unisex (ONLY gender="unisex")
+    const unisexProducts = products.filter((product) => {
         const gender = product.gender || "unisex";
 
-        // ONLY show men's products (strict filtering)
-        if (gender !== "men") {
+        // ONLY show unisex products (strict filtering)
+        if (gender !== "unisex") {
             return false;
         }
 
@@ -45,9 +45,9 @@ export default function Men() {
                         <ArrowLeft className="h-5 w-5" />
                     </Button>
                     <div>
-                        <h1 className="text-3xl md:text-4xl font-bold">Men's Collection</h1>
+                        <h1 className="text-3xl md:text-4xl font-bold">Unisex Collection</h1>
                         <p className="text-muted-foreground mt-1">
-                            Handpicked deals for men • {menProducts.length} products
+                            Perfect for everyone • {unisexProducts.length} products
                         </p>
                     </div>
                 </div>
@@ -58,7 +58,7 @@ export default function Men() {
                         <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
                         <Input
                             type="text"
-                            placeholder="Search men's products..."
+                            placeholder="Search unisex products..."
                             value={searchQuery}
                             onChange={(e) => setSearchQuery(e.target.value)}
                             className="pl-10 h-12 text-base"
@@ -73,12 +73,12 @@ export default function Men() {
                             <Card key={i} className="h-64 animate-pulse bg-muted" />
                         ))}
                     </div>
-                ) : menProducts.length > 0 ? (
+                ) : unisexProducts.length > 0 ? (
                     <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 auto-rows-[200px]">
-                        {menProducts.map((product, index) => {
+                        {unisexProducts.map((product, index) => {
                             // Create varied grid sizes for Bento effect
-                            const isLarge = index % 7 === 0;
-                            const isTall = index % 5 === 0;
+                            const isLarge = index % 6 === 0;
+                            const isTall = index % 4 === 0;
 
                             return (
                                 <Card
@@ -114,11 +114,9 @@ export default function Men() {
                                         </Badge>
 
                                         {/* Gender Badge */}
-                                        {product.gender && (
-                                            <Badge className="absolute top-2 right-2 bg-blue-500/90 text-white capitalize text-xs">
-                                                {product.gender}
-                                            </Badge>
-                                        )}
+                                        <Badge className="absolute top-2 right-2 bg-purple-500/90 text-white capitalize text-xs">
+                                            Unisex
+                                        </Badge>
 
                                         {/* Trending Badge */}
                                         {product.clicks && product.clicks > 1200 && (
@@ -134,7 +132,7 @@ export default function Men() {
                 ) : (
                     <Card className="p-12 text-center">
                         <p className="text-muted-foreground">
-                            {searchQuery ? "No products found matching your search" : "No men's products available yet. Admin can add products with gender set to 'Men' or 'Unisex'."}
+                            {searchQuery ? "No products found matching your search" : "No unisex products available yet. Admin can add products with gender set to 'Unisex'."}
                         </p>
                     </Card>
                 )}

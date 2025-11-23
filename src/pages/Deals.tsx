@@ -281,14 +281,14 @@ export default function Deals() {
               {/* Divider */}
               <div className="border-t border-border" />
 
-              {/* Gender Icons Row - Navigate to Men/Women pages */}
+              {/* Gender Icons Row - Navigate to Men/Women/Unisex pages */}
               <div className="flex items-center gap-4">
                 <div className="w-24 flex-shrink-0">
                   <span className="text-sm font-bold text-foreground">Shop By</span>
                 </div>
                 <div className="flex gap-3">
                   <Link to="/men">
-                    <Button variant="outline" className="gap-2 hover:bg-primary hover:text-primary-foreground transition-colors">
+                    <Button variant="outline" className="gap-2 hover:bg-blue-500 hover:text-white transition-colors">
                       <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                       </svg>
@@ -296,11 +296,19 @@ export default function Deals() {
                     </Button>
                   </Link>
                   <Link to="/women">
-                    <Button variant="outline" className="gap-2 hover:bg-primary hover:text-primary-foreground transition-colors">
+                    <Button variant="outline" className="gap-2 hover:bg-pink-500 hover:text-white transition-colors">
                       <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                       </svg>
                       Women
+                    </Button>
+                  </Link>
+                  <Link to="/unisex">
+                    <Button variant="outline" className="gap-2 hover:bg-purple-500 hover:text-white transition-colors">
+                      <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+                      </svg>
+                      Unisex
                     </Button>
                   </Link>
                 </div>

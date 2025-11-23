@@ -14,6 +14,7 @@ import Contact from "./pages/Contact";
 import Disclaimer from "./pages/Disclaimer";
 import Men from "./pages/Men";
 import Women from "./pages/Women";
+import Unisex from "./pages/Unisex";
 import AdminLogin from "./pages/admin/Login";
 import AdminDashboard from "./pages/admin/Dashboard";
 import { AdminProvider } from "./contexts/AdminContext";
@@ -38,6 +39,7 @@ const App = () => (
             <Route path="/saved" element={<Saved />} />
             <Route path="/men" element={<Men />} />
             <Route path="/women" element={<Women />} />
+            <Route path="/unisex" element={<Unisex />} />
             <Route path="/about" element={<About />} />
             <Route path="/contact" element={<Contact />} />
             <Route path="/legal/disclaimer" element={<Disclaimer />} />
