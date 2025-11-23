@@ -242,8 +242,9 @@ export default function AdminDashboard() {
 
             <main className="container mx-auto px-4 py-8">
                 <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-8">
-                    <TabsList className="grid w-full grid-cols-2 max-w-md mx-auto p-1 bg-slate-200/50">
+                    <TabsList className="grid w-full grid-cols-3 max-w-md mx-auto p-1 bg-slate-200/50">
                         <TabsTrigger value="add" className="data-[state=active]:bg-white data-[state=active]:shadow-sm">Add Product</TabsTrigger>
+                        <TabsTrigger value="ads" className="data-[state=active]:bg-white data-[state=active]:shadow-sm">Manage Ads</TabsTrigger>
                         <TabsTrigger value="list" className="data-[state=active]:bg-white data-[state=active]:shadow-sm">All Products</TabsTrigger>
                     </TabsList>
 
@@ -414,6 +415,106 @@ export default function AdminDashboard() {
                                     </CardContent>
                                 </Card>
                             </div>
+                        </div>
+                    </TabsContent>
+
+                    {/* ADS TAB */}
+                    <TabsContent value="ads" className="max-w-4xl mx-auto">
+                        <div className="grid gap-8">
+                            <Card className="border-0 shadow-md">
+                                <CardHeader>
+                                    <CardTitle className="flex items-center gap-2">
+                                        <Sparkles className="h-5 w-5 text-primary" />
+                                        Create New Ad
+                                    </CardTitle>
+                                </CardHeader>
+                                <CardContent className="space-y-4">
+                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                        <div className="space-y-3">
+                                            <Label>Ad Image</Label>
+                                            <div className="aspect-video rounded-lg overflow-hidden border bg-slate-100 relative group">
+                                                {formData.imageUrl ? (
+                                                    <img src={formData.imageUrl} alt="Ad Preview" className="w-full h-full object-cover" />
+                                                ) : (
+                                                    <div className="w-full h-full flex items-center justify-center text-slate-400">
+                                                        <ImageIcon className="h-8 w-8" />
+                                                    </div>
+                                                )}
+                                                <div
+                                                    onClick={() => fileInputRef.current?.click()}
+                                                    className="absolute inset-0 bg-black/50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer"
+                                                >
+                                                    <span className="text-white font-medium">Change Image</span>
+                                                </div>
+                                            </div>
+                                            <input
+                                                type="file"
+                                                ref={fileInputRef}
+                                                className="hidden"
+                                                accept="image/*"
+                                                onChange={handleImageUpload}
+                                            />
+                                        </div>
+                                        <div className="space-y-4">
+                                            <div className="space-y-2">
+                                                <Label>Ad Name (Internal)</Label>
+                                                <Input
+                                                    value={formData.name}
+                                                    onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                                                    placeholder="e.g., Summer Sale Banner"
+                                                />
+                                            </div>
+                                            <div className="space-y-2">
+                                                <Label>Target Link</Label>
+                                                <Input
+                                                    value={formData.affiliateUrl}
+                                                    onChange={(e) => setFormData({ ...formData, affiliateUrl: e.target.value })}
+                                                    placeholder="https://..."
+                                                />
+                                            </div>
+                                            <Button
+                                                onClick={() => {
+                                                    setFormData(prev => ({ ...prev, category: 'ad_banner', price: "0", description: "Ad Banner" }));
+                                                    setTimeout(handleSave, 100);
+                                                }}
+                                                className="w-full mt-4"
+                                                disabled={saving}
+                                            >
+                                                {saving ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : <Plus className="h-4 w-4 mr-2" />}
+                                                Publish Ad
+                                            </Button>
+                                        </div>
+                                    </div>
+                                </CardContent>
+                            </Card>
+
+                            <Card className="border-0 shadow-md">
+                                <CardHeader>
+                                    <CardTitle>Active Ads</CardTitle>
+                                </CardHeader>
+                                <CardContent>
+                                    <div className="grid gap-4">
+                                        {products.filter(p => p.category === 'ad_banner').length === 0 ? (
+                                            <p className="text-center text-muted-foreground py-8">No active ads found.</p>
+                                        ) : (
+                                            products.filter(p => p.category === 'ad_banner').map(ad => (
+                                                <div key={ad.id} className="flex items-center gap-4 p-4 border rounded-lg bg-white">
+                                                    <div className="w-24 h-16 rounded bg-slate-100 overflow-hidden flex-shrink-0">
+                                                        <img src={ad.imageUrl} alt={ad.name} className="w-full h-full object-cover" />
+                                                    </div>
+                                                    <div className="flex-1 min-w-0">
+                                                        <h4 className="font-medium truncate">{ad.name}</h4>
+                                                        <p className="text-xs text-muted-foreground truncate">{ad.affiliateUrl}</p>
+                                                    </div>
+                                                    <Button variant="ghost" size="icon" className="text-red-500 hover:bg-red-50" onClick={() => handleDelete(ad.id)}>
+                                                        <Trash2 className="h-4 w-4" />
+                                                    </Button>
+                                                </div>
+                                            ))
+                                        )}
+                                    </div>
+                                </CardContent>
+                            </Card>
                         </div>
                     </TabsContent>
 

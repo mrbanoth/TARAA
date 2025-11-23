@@ -204,7 +204,7 @@ export default function About() {
               </div>
               <h3 className="text-2xl md:text-3xl font-bold mb-4">Our Revenue Model</h3>
               <p className="text-base md:text-lg text-muted-foreground leading-relaxed">
-                TARAA operates on an <span className="font-semibold text-foreground">affiliate and advertisement-based revenue model</span>. When you make a purchase through our links, we earn a small commission at <span className="font-semibold text-foreground">no extra cost to you</span>. This helps us keep the platform free and continue curating amazing deals!
+                TARAA is dedicated to helping students find the best deals. We curate high-quality, budget-friendly products from trusted platforms to ensure you get the best value for your money.
               </p>
             </CardContent>
           </Card>

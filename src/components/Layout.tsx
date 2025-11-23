@@ -177,48 +177,46 @@ export default function Layout({ children }: LayoutProps) {
                   <span>+91 9390730129</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <Mail className="h-4 w-4" />
-                  <a href="mailto:sandeepnaikb0@gmail.com" className="hover:text-primary transition-colors">
-                    sandeepnaikb0@gmail.com
-                  </a>
+                  <div className="space-y-2 text-sm text-muted-foreground">
+                    <p>Contact us via the form above</p>
+                  </div>
                 </div>
               </div>
-            </div>
 
-            {/* Quick Links */}
-            <div>
-              <h3 className="font-semibold mb-4 text-foreground">Quick Links</h3>
-              <ul className="space-y-2">
-                {navLinks.map((link) => (
-                  <li key={link.to}>
+              {/* Quick Links */}
+              <div>
+                <h3 className="font-semibold mb-4 text-foreground">Quick Links</h3>
+                <ul className="space-y-2">
+                  {navLinks.map((link) => (
+                    <li key={link.to}>
+                      <Link
+                        to={link.to}
+                        className="text-sm text-muted-foreground hover:text-primary transition-colors"
+                      >
+                        {link.label}
+                      </Link>
+                    </li>
+                  ))}
+                  <li>
                     <Link
-                      to={link.to}
+                      to="/legal/disclaimer"
                       className="text-sm text-muted-foreground hover:text-primary transition-colors"
                     >
-                      {link.label}
+                      Disclaimer
                     </Link>
                   </li>
-                ))}
-                <li>
-                  <Link
-                    to="/legal/disclaimer"
-                    className="text-sm text-muted-foreground hover:text-primary transition-colors"
-                  >
-                    Disclaimer
-                  </Link>
-                </li>
-              </ul>
-            </div>
+                </ul>
+              </div>
 
-            {/* Important Info */}
-            <div>
-              <h3 className="font-semibold mb-4 text-foreground">Important</h3>
-              <p className="text-sm text-muted-foreground">
-                We only show deals and redirect to trusted shopping apps. We do not handle orders, shipping or refunds.
-              </p>
+              {/* Important Info */}
+              <div>
+                <h3 className="font-semibold mb-4 text-foreground">Important</h3>
+                <p className="text-sm text-muted-foreground">
+                  We only show deals and redirect to trusted shopping apps. We do not handle orders, shipping or refunds.
+                </p>
+              </div>
             </div>
           </div>
-
           <div className="mt-8 pt-6 border-t border-border text-center">
             <p className="text-sm text-muted-foreground">
               © 2025 TARAA. All rights reserved.

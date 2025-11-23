@@ -26,7 +26,7 @@ export default function Disclaimer() {
     },
     {
       title: "Affiliate Disclosure",
-      content: "TARAA earns commissions through affiliate partnerships when you make purchases through our links. This does not affect the price you pay. We are transparent about our business model."
+      content: "TARAA curates deals from various e-commerce platforms. We are not responsible for the products, shipping, or returns. Please check the respective platform's policies."
     },
     {
       title: "No Warranties",

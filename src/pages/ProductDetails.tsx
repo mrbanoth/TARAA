@@ -159,7 +159,7 @@ export default function ProductDetails() {
                 return { name: "Store", logo: null, color: "bg-primary hover:bg-primary/90 text-white" };
               };
 
-              const platform = getPlatformInfo(product.affiliateLink || "");
+              const platform = getPlatformInfo(product.affiliateUrl || "");
               const isFav = isFavorite(product.id);
 
               return (
@@ -167,7 +167,7 @@ export default function ProductDetails() {
                   <Button
                     size="lg"
                     className={`flex-1 text-lg font-semibold h-14 rounded-full shadow-none transition-all hover:scale-[1.02] ${platform.color}`}
-                    onClick={() => window.open(product.affiliateLink, "_blank", "noopener,noreferrer")}
+                    onClick={() => window.open(product.affiliateUrl, "_blank", "noopener,noreferrer")}
                   >
                     {platform.logo ? (
                       <div className="flex items-center gap-2">
@@ -194,7 +194,7 @@ export default function ProductDetails() {
             })()}
 
             <p className="text-xs text-muted-foreground text-center">
-              You'll be redirected to our partner store. We earn a small commission at no extra cost to you.
+              You'll be redirected to our partner store to complete your purchase securely.
             </p>
 
             {/* Ad Unit */}

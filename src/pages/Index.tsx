@@ -52,7 +52,7 @@ export default function Index() {
   const trustPoints = [
     { icon: Users, title: "Curated Picks Only", desc: "Handpicked for college students" },
     { icon: Shield, title: "Checkout on Trusted Apps", desc: "Safe purchases via verified platforms" },
-    { icon: Zap, title: "Affiliate + Ads Supported", desc: "Transparent revenue model" },
+    { icon: Zap, title: "Free to Use", desc: "Always free for students" },
   ];
 
   const scrollToProducts = () => {
@@ -270,7 +270,7 @@ export default function Index() {
               Want Your Brand on TARAA?
             </h2>
             <p className="text-lg mb-8 opacity-90">
-              Collaborate with us for student-focused and budget-friendly promotions. Reach thousands of college students across AP & TS.
+              Collaborate with us for student-focused and budget-friendly promotions. Reach thousands of college students.
             </p>
             <Button
               size="lg"

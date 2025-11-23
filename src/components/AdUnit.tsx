@@ -1,4 +1,5 @@
-import { Card } from "@/components/ui/card";
+import { useEffect, useState } from "react";
+import { useProducts } from "@/hooks/useProducts";
 
 interface AdUnitProps {
     slotId?: string;
@@ -7,33 +8,41 @@ interface AdUnitProps {
 }
 
 export default function AdUnit({ slotId, format = "auto", className = "" }: AdUnitProps) {
-    // In development or if no slot ID, show a placeholder
-    const isDev = true; // Change to false when you have real AdSense code
+    const { products } = useProducts();
+    const [ad, setAd] = useState<any>(null);
 
-    if (isDev) {
+    useEffect(() => {
+        // Filter for products marked as 'ad_banner'
+        const ads = products.filter(p => p.category === 'ad_banner');
+        if (ads.length > 0) {
+            // Pick a random ad
+            const randomAd = ads[Math.floor(Math.random() * ads.length)];
+            setAd(randomAd);
+        }
+    }, [products]);
+
+    if (ad) {
         return (
-            <Card className={`bg-slate-50 border-dashed border-2 border-slate-200 flex items-center justify-center p-4 ${className}`}>
-                <div className="text-center text-muted-foreground text-sm">
-                    <p className="font-semibold">Advertisement Space</p>
-                    <p className="text-xs">AdSense Slot: {slotId || "Pending"}</p>
-                </div>
-            </Card>
+            <div className={`ad-container overflow-hidden rounded-lg shadow-sm ${className}`}>
+                <a
+                    href={ad.affiliateUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="block relative group"
+                >
+                    <img
+                        src={ad.imageUrl}
+                        alt={ad.name}
+                        className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-[1.01]"
+                    />
+                    <div className="absolute top-2 right-2 bg-black/60 text-white text-[10px] px-2 py-0.5 rounded">
+                        Sponsored
+                    </div>
+                </a>
+            </div>
         );
     }
 
-    return (
-        <div className={`ad-container ${className}`}>
-            <ins
-                className="adsbygoogle"
-                style={{ display: "block" }}
-                data-ad-client="ca-pub-YOUR_PUBLISHER_ID" // Replace with your ID
-                data-ad-slot={slotId}
-                data-ad-format={format}
-                data-full-width-responsive="true"
-            />
-            <script>
-                (adsbygoogle = window.adsbygoogle || []).push({ });
-            </script>
-        </div>
-    );
+    // Fallback / Placeholder if no ads found
+    return null;
 }
