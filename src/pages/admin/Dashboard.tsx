@@ -14,6 +14,7 @@ import { CATEGORIES } from "@/data/config";
 import { useProducts } from "@/hooks/useProducts";
 import { supabase, isSupabaseConfigured } from "@/lib/supabase";
 import { toast } from "sonner";
+import AdminTestimonials from "@/components/AdminTestimonials";
 
 export default function AdminDashboard() {
     const { logout } = useAdmin();
@@ -242,10 +243,11 @@ export default function AdminDashboard() {
 
             <main className="container mx-auto px-4 py-8">
                 <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-8">
-                    <TabsList className="grid w-full grid-cols-3 max-w-md mx-auto p-1 bg-slate-200/50">
+                    <TabsList className="grid w-full grid-cols-4 max-w-2xl mx-auto p-1 bg-slate-200/50">
                         <TabsTrigger value="add" className="data-[state=active]:bg-white data-[state=active]:shadow-sm">Add Product</TabsTrigger>
-                        <TabsTrigger value="ads" className="data-[state=active]:bg-white data-[state=active]:shadow-sm">Manage Ads</TabsTrigger>
                         <TabsTrigger value="list" className="data-[state=active]:bg-white data-[state=active]:shadow-sm">All Products</TabsTrigger>
+                        <TabsTrigger value="ads" className="data-[state=active]:bg-white data-[state=active]:shadow-sm">Manage Ads</TabsTrigger>
+                        <TabsTrigger value="testimonials" className="data-[state=active]:bg-white data-[state=active]:shadow-sm">Testimonials</TabsTrigger>
                     </TabsList>
 
                     {/* ADD PRODUCT TAB */}
@@ -516,6 +518,11 @@ export default function AdminDashboard() {
                                 </CardContent>
                             </Card>
                         </div>
+                    </TabsContent>
+
+                    {/* TESTIMONIALS TAB */}
+                    <TabsContent value="testimonials">
+                        <AdminTestimonials />
                     </TabsContent>
 
                     {/* LIST TAB */}

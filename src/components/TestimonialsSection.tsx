@@ -1,17 +1,21 @@
+import { useState, useEffect } from "react";
+import { supabase } from "@/lib/supabase";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Star } from "lucide-react";
 
 interface TestimonialItem {
+    id?: string;
     name: string;
     role: string;
     college: string;
     image: string;
+    image_url?: string; // Handle both naming conventions
     rating: number;
     content: string;
 }
 
-const testimonials: TestimonialItem[] = [
+const fallbackTestimonials: TestimonialItem[] = [
     {
         name: "Priya Sharma",
         role: "Final Year Student",
@@ -42,6 +46,33 @@ const testimonials: TestimonialItem[] = [
 ];
 
 export default function TestimonialsSection() {
+    const [testimonials, setTestimonials] = useState<TestimonialItem[]>(fallbackTestimonials);
+
+    useEffect(() => {
+        fetchTestimonials();
+    }, []);
+
+    const fetchTestimonials = async () => {
+        try {
+            const { data, error } = await supabase
+                .from("testimonials")
+                .select("*")
+                .order("created_at", { ascending: false });
+
+            if (!error && data && data.length > 0) {
+                // Map Supabase data to component format
+                const mappedData = data.map(item => ({
+                    ...item,
+                    image: item.image_url // Map image_url to image
+                }));
+                setTestimonials(mappedData);
+            }
+        } catch (error) {
+            console.error("Error fetching testimonials:", error);
+            // Keep fallback data on error
+        }
+    };
+
     return (
         <section className="py-16 bg-gradient-to-br from-blue-50 via-white to-purple-50">
             <div className="container mx-auto px-4 sm:px-6">
@@ -65,7 +96,14 @@ export default function TestimonialsSection() {
                         <Card key={i} className="border-2 hover:border-primary/30 transition-all">
                             <CardHeader className="flex flex-col items-center text-center p-6">
                                 <div className="w-16 h-16 rounded-full overflow-hidden mb-4 bg-gradient-to-br from-primary to-purple-500 p-0.5">
-                                    <img src={t.image} alt={t.name} className="w-full h-full object-cover rounded-full" />
+                                    <img
+                                        src={t.image || t.image_url}
+                                        alt={t.name}
+                                        className="w-full h-full object-cover rounded-full"
+                                        onError={(e) => {
+                                            (e.target as HTMLImageElement).src = `https://api.dicebear.com/7.x/avataaars/svg?seed=${t.name}`;
+                                        }}
+                                    />
                                 </div>
                                 <CardTitle className="text-lg font-semibold">{t.name}</CardTitle>
                                 <p className="text-sm text-muted-foreground">

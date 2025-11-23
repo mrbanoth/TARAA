@@ -3,6 +3,7 @@ import { Flame, ShoppingBag, BookOpen, Laptop, Home as HomeIcon, Users, Shield, 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import Layout from "@/components/Layout";
+import ProductCard from "@/components/ProductCard";
 import ProductGrid from "@/components/ProductGrid";
 import { useProducts } from "@/hooks/useProducts";
 import BentoGrid from "@/components/BentoGrid";
@@ -14,7 +15,9 @@ import SEO from "@/components/SEO";
 export default function Index() {
   const { products, loading } = useProducts();
 
-  const featuredProducts = products.filter((p) => p.isFeatured).slice(0, 8);
+  const featuredProducts = products
+    .filter((p) => p.category === "tshirt" || p.name.toLowerCase().includes("t-shirt"))
+    .slice(0, 4);
   const trendingProducts = products
     .filter((p) => p.clicks && p.clicks > 1000)
     .sort((a, b) => (b.clicks || 0) - (a.clicks || 0))
@@ -156,6 +159,25 @@ export default function Index() {
         </div>
       </section>
 
+      {/* Trending T-Shirts Section */}
+      <section className="py-16 bg-slate-50">
+        <div className="container mx-auto px-4 sm:px-6">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl md:text-4xl font-extrabold mb-4">
+              Trending T-Shirts
+            </h2>
+            <p className="text-lg text-muted-foreground">
+              Grab the coolest tees at unbeatable prices!
+            </p>
+          </div>
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-6">
+            {featuredProducts.map((product) => (
+              <ProductCard key={product.id} product={product} />
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* Shop by Category */}
       <section className="py-16 bg-white">
         <div className="container mx-auto px-4 sm:px-6">
@@ -168,7 +190,7 @@ export default function Index() {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
             {categories.map((cat, idx) => (
               <Link key={idx} to={cat.link} className="block h-full">
                 <Card className={`overflow-hidden group hover:shadow-xl transition-all duration-300 h-48 md:h-64 ${cat.color} cursor-pointer relative border-0`}>

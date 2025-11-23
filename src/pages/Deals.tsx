@@ -19,6 +19,7 @@ import { useState, useMemo, useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
 import Layout from "@/components/Layout";
 import ProductGrid from "@/components/ProductGrid";
+import ProductCarousel from "@/components/ProductCarousel";
 import { products, Category } from "@/data/products";
 import { useProducts } from "@/hooks/useProducts";
 import { Card } from "@/components/ui/card";
@@ -396,6 +397,14 @@ export default function Deals() {
               </Badge>
             ))}
           </div>
+        )}
+
+        {/* T-Shirt Carousel (Only show when no filters or T-shirt category selected) */}
+        {(!hasActiveFilters || filters.category === "tshirt") && (
+          <ProductCarousel
+            title="Trending T-Shirts"
+            products={products.filter(p => p.category === "tshirt").slice(0, 10)}
+          />
         )}
 
         {/* Results Count */}

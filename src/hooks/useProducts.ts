@@ -38,6 +38,22 @@ export function useProducts() {
         }
 
         fetchProducts();
+
+        // Real-time subscription
+        const channel = supabase
+            .channel('products_channel')
+            .on(
+                'postgres_changes',
+                { event: '*', schema: 'public', table: 'products' },
+                () => {
+                    fetchProducts();
+                }
+            )
+            .subscribe();
+
+        return () => {
+            supabase.removeChannel(channel);
+        };
     }, []);
 
     return { products, loading, error };

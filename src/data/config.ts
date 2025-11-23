@@ -7,9 +7,14 @@
 export const CATEGORIES = [
     { value: "all", label: "All" },
     { value: "tshirt", label: "T-Shirts" },
+    { value: "shirt", label: "Shirts" },
     { value: "bag", label: "Bags" },
     { value: "tech", label: "Tech" },
+    { value: "shoes", label: "Shoes" },
+    { value: "watch", label: "Watches" },
     { value: "hostel", label: "Hostel" },
+    { value: "books", label: "Books" },
+    { value: "accessories", label: "Accessories" },
 ] as const;
 
 // ====================================
