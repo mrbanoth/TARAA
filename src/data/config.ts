@@ -85,7 +85,6 @@ export const SOCIAL_MEDIA = {
 export const NAV_LINKS = [
     { to: "/", label: "Home" },
     { to: "/deals", label: "Deals" },
-    { to: "/saved", label: "Saved" },
     { to: "/about", label: "About" },
     { to: "/contact", label: "Contact" },
 ] as const;
