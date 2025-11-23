@@ -1,115 +1,100 @@
 # 🛍️ TARAA - Smart Deals for Students
 
-> Your trusted companion for finding the best deals on everything you need for college life.
+> **Live Website:** [https://taraa.online](https://taraa.online)
+
+**TARAA** is a curated deals platform designed specifically for students. We handpick the best budget-friendly products from trusted platforms like **Meesho**, **Amazon**, **Flipkart**, **Myntra**, **Ajio**, and **Shopsy**.
+
+![TARAA Preview](https://taraa.online/og-image.png)
 
 ---
 
-## 🎯 What is TARAA?
+## 🚀 Features
 
-**TARAA** is a curated deals platform designed specifically for students. We handpick the best budget-friendly products from trusted platforms like **Meesho**, **Amazon**, **Flipkart**, **Myntra**, **Ajio**, and **Shopsy** - so you don't have to waste time hunting for deals.
+### 🛒 For Students
+- **Curated Deals:** Handpicked fashion, tech, and hostel essentials under ₹500.
+- **Multi-Platform:** Compare prices from Amazon, Flipkart, Meesho, etc.
+- **5-Star Ratings:** Read and write reviews for products.
+- **Real-Time Search:** Instantly find what you need.
+- **Favorites:** Save deals for later.
+- **Mobile First:** Optimized for phone browsing.
 
-### Why Students Love TARAA
-
-- � **Save Money** - Only the best deals, verified daily
-- ⏱️ **Save Time** - No more browsing 10 different websites
-- 🎯 **Student-Focused** - Products you actually need
-- ✨ **Quality Curated** - Every product is handpicked
-- 📱 **Easy Shopping** - Browse on any device, buy with one click
-
----
-
-## � What Can You Find?
-
-### Fashion & Accessories
-- Oversized T-Shirts
-- College Bags & Backpacks
-- Casual Wear
-- Sneakers & Footwear
-
-### Tech & Gadgets
-- Phone Accessories
-- Earphones & Audio
-- Laptop Accessories
-- Power Banks
-
-### Hostel Essentials
-- Storage Solutions
-- Room Décor
-- Study Desk Items
-- Daily Necessities
+### 👨‍💻 For Admins
+- **Dashboard:** Manage products, ads, and users.
+- **Analytics:** Track clicks and views.
+- **Ad Management:** Upload and schedule banner ads.
 
 ---
 
-## � How It Works
+## 🛠️ Tech Stack
 
-1. **Browse** - Explore curated deals across categories
-2. **Compare** - See products from multiple platforms
-3. **Click** - Tap "Buy Now" to go to the seller
-4. **Save** - Get the best price instantly
-
-*No middleman. No hidden fees. Just great deals.*
-
----
-
-## 🌟 Features
-
-- ✅ **Real-Time Updates** - Fresh deals added daily
-- ✅ **Multi-Platform** - Shop from 6+ trusted stores
-- ✅ **Smart Filters** - Find exactly what you need
-- ✅ **Mobile-Friendly** - Shop on the go
-- ✅ **Save Favorites** - Bookmark deals for later
-- ✅ **24/7 Support** - We're here to help
+- **Frontend:** React, TypeScript, Vite
+- **Styling:** Tailwind CSS, Shadcn UI
+- **Icons:** Lucide React
+- **Backend:** Supabase (Database, Auth, Storage)
+- **Deployment:** Vercel
+- **SEO:** React Helmet Async
 
 ---
 
-## � Contact & Support
+## 📦 Setup & Installation
 
-**Founder**: Sandeep  
-**Email**: [sandeepnaikb0@gmail.com](mailto:sandeepnaikb0@gmail.com)
+If you want to run this project locally:
 
-**Live Chat**: Available on our website (bottom-right corner)
+1.  **Clone the repo**
+    ```bash
+    git clone https://github.com/yourusername/taraa.git
+    cd taraa
+    ```
 
-Have questions? Feature requests? Just want to say hi?  
-We'd love to hear from you!
+2.  **Install dependencies**
+    ```bash
+    npm install
+    ```
 
----
+3.  **Setup Environment Variables**
+    Create a `.env` file in the root directory:
+    ```env
+    VITE_SUPABASE_URL=your_supabase_url
+    VITE_SUPABASE_ANON_KEY=your_supabase_anon_key
+    ```
 
-## 🚀 Our Mission
-
-To make shopping affordable and effortless for every student in India. We believe great deals shouldn't require hours of searching - that's why we do the hard work for you.
-
----
-
-## 🤝 Partner With Us
-
-Are you a brand or seller interested in reaching students?  
-**Email us**: sandeepnaikb0@gmail.com
-
----
-
-## � Follow Us
-
-Stay updated with the latest deals:
-- Website: [Coming Soon]
-- Instagram: [Coming Soon]
-- Twitter: [Coming Soon]
+4.  **Run Development Server**
+    ```bash
+    npm run dev
+    ```
 
 ---
 
-## � Legal
+## 🗄️ Database Schema (Supabase)
 
-- [Terms of Service](#)
-- [Privacy Policy](#)
-- [Disclaimer](/legal/disclaimer)
+### `products` Table
+- `id`: UUID (Primary Key)
+- `name`: Text
+- `price`: Number
+- `description`: Text
+- `category`: Text
+- `image_url`: Text
+- `affiliate_link`: Text
+- `platform`: Text (Amazon, Flipkart, etc.)
+- `rating`: Number
+
+### `ratings` Table
+- `id`: UUID
+- `product_id`: UUID (Foreign Key)
+- `user_name`: Text
+- `rating`: Number (1-5)
+- `review_text`: Text
+- `created_at`: Timestamp
+
+---
+
+## 🤝 Contact & Support
+
+**Founder:** Sandeep  
+**Email:** [sandeepnaikb0@gmail.com](mailto:sandeepnaikb0@gmail.com)
 
 ---
 
 ## ❤️ Made for Students, By Students
-
-TARAA was born out of personal experience - spending hours hunting for good deals online. We built the platform we wish existed when we were students.
-
-**Happy Shopping!** 🛍️
-
----
 
 *© 2024 TARAA. All rights reserved.*

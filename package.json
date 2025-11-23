@@ -2,6 +2,9 @@
   "name": "taraa",
   "private": true,
   "version": "1.0.0",
+  "description": "Smart Deals for Students",
+  "author": "Sandeep",
+  "homepage": "https://taraa.online",
   "type": "module",
   "scripts": {
     "dev": "vite",
