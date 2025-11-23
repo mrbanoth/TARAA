@@ -9,6 +9,10 @@ import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import ProductCard from "@/components/ProductCard";
 import AdUnit from "@/components/AdUnit";
+import StarRating from "@/components/StarRating";
+import AddReviewForm from "@/components/AddReviewForm";
+import ReviewsList from "@/components/ReviewsList";
+import { useRatings } from "@/hooks/useRatings";
 
 export default function ProductDetails() {
   const { id } = useParams<{ id: string }>();
@@ -16,6 +20,7 @@ export default function ProductDetails() {
   const { isFavorite, toggleFavorite } = useFavorites();
   const product = products.find((p) => p.id === id);
   const [activeImage, setActiveImage] = useState<string>("");
+  const { ratings, averageRating, loading: ratingsLoading, fetchRatings } = useRatings(id);
 
   useEffect(() => {
     if (product) {
@@ -117,15 +122,32 @@ export default function ProductDetails() {
               <p className="text-muted-foreground text-lg whitespace-pre-line">{product.description}</p>
             </div>
 
-            {product.rating && (
-              <div className="flex items-center gap-2">
-                <div className="flex items-center gap-1">
-                  <Star className="h-5 w-5 fill-primary text-primary" />
-                  <span className="font-semibold text-lg">{product.rating}</span>
+            {/* Average Rating Display - From Database */}
+            {averageRating.total > 0 && (
+              <div className="flex items-center gap-3 bg-yellow-50 px-4 py-3 rounded-lg">
+                <div className="flex items-center gap-2">
+                  <Star className="h-6 w-6 fill-yellow-400 text-yellow-400" />
+                  <span className="font-bold text-2xl">{averageRating.average}</span>
                 </div>
-                <span className="text-sm text-muted-foreground">(Student Reviews)</span>
+                <div className="text-sm text-muted-foreground">
+                  <div className="font-semibold">
+                    {averageRating.total} {averageRating.total === 1 ? "Review" : "Reviews"}
+                  </div>
+                  <div className="flex gap-1 mt-1">
+                    {[1, 2, 3, 4, 5].map((star) => (
+                      <Star
+                        key={star}
+                        className={`h-3 w-3 ${star <= Math.round(averageRating.average)
+                          ? "fill-yellow-400 text-yellow-400"
+                          : "fill-gray-200 text-gray-200"
+                          }`}
+                      />
+                    ))}
+                  </div>
+                </div>
               </div>
             )}
+
 
             <div className="text-4xl font-bold text-primary">₹{product.price}</div>
 
@@ -200,6 +222,39 @@ export default function ProductDetails() {
             {/* Ad Unit */}
             <div className="pt-4">
               <AdUnit slotId="product-sidebar-ad" className="min-h-[250px]" />
+            </div>
+          </div>
+        </div>
+
+
+        {/* Reviews & Ratings Section */}
+        <div className="my-12">
+          <h2 className="text-3xl md:text-4xl font-bold mb-8">
+            Reviews & Ratings
+          </h2>
+
+          <div className="grid lg:grid-cols-2 gap-8">
+            {/* Add Review Form */}
+            <div>
+              <AddReviewForm
+                productId={product.id}
+                onReviewAdded={() => {
+                  // Refresh ratings after adding a review
+                  if (id) {
+                    fetchRatings(id);
+                  }
+                }}
+              />
+            </div>
+
+            {/* Reviews List */}
+            <div>
+              <h3 className="text-xl font-semibold mb-4">
+                Student Reviews ({ratings.length})
+              </h3>
+              <div className="max-h-[600px] overflow-y-auto pr-2">
+                <ReviewsList ratings={ratings} loading={ratingsLoading} />
+              </div>
             </div>
           </div>
         </div>

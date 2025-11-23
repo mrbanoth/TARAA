@@ -8,6 +8,7 @@ import { useProducts } from "@/hooks/useProducts";
 import BentoGrid from "@/components/BentoGrid";
 import HotDeals from "@/components/HotDeals";
 // import Newsletter from "@/components/Newsletter";
+import Testimonials from "@/components/Testimonials";
 
 export default function Index() {
   const { products, loading } = useProducts();
@@ -261,6 +262,10 @@ export default function Index() {
 
       {/* Newsletter Section */}
       {/* <Newsletter /> */}
+
+
+      {/* Testimonials Section */}
+      <Testimonials />
 
       {/* Collab CTA */}
       < section className="py-16 bg-primary text-white" >
