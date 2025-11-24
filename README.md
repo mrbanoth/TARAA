@@ -4,7 +4,11 @@
 
 **TARAA** is a curated deals platform designed specifically for students. We handpick the best budget-friendly products from trusted platforms like **Meesho**, **Amazon**, **Flipkart**, **Myntra**, **Ajio**, and **Shopsy**.
 
-![TARAA Preview](https://taraa.online/og-image.png)
+<div align="center">
+  <img src="https://raw.githubusercontent.com/MrBanoth/TARAA/main/public/og-image.png" alt="TARAA Preview" width="600" />
+</div>
+
+*Screenshot of TARAA - Smart Deals for Students*
 
 ---
 
