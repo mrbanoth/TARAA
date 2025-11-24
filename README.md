@@ -48,16 +48,14 @@ Have questions or suggestions? I'd love to hear from you!
 
 Here's a quick look at what TARAA offers:
 
-<div align="center">
-  <img src="https://raw.githubusercontent.com/MrBanoth/TARAA/main/public/ot1.jpg" alt="TARAA Desktop View" width="80%" style="border-radius: 8px; margin: 1rem 0; box-shadow: 0 4px 6px rgba(0,0,0,0.1);" />
-  <p>Desktop View</p>
-  
-  <img src="https://raw.githubusercontent.com/MrBanoth/TARAA/main/public/ot2.png" alt="TARAA Mobile View" width="40%" style="border-radius: 8px; margin: 1rem 0; box-shadow: 0 4px 6px rgba(0,0,0,0.1);" />
-  <p>Mobile View</p>
-  
-  <img src="https://raw.githubusercontent.com/MrBanoth/TARAA/main/public/ot3.png" alt="TARAA Admin Panel" width="80%" style="border-radius: 8px; margin: 1rem 0; box-shadow: 0 4px 6px rgba(0,0,0,0.1);" />
-  <p>Admin Panel</p>
-</div>
+Here's a quick look at what TARAA offers:
+
+| Desktop View | Mobile View |
+|--------------|-------------|
+| ![TARAA Desktop View](./public/ot1.jpg) | ![TARAA Mobile View](./public/ot2.png) |
+
+### Admin Panel
+![TARAA Admin Panel](./public/ot3.png)
 
 ---
 
