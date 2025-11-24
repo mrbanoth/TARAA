@@ -70,24 +70,24 @@ export default function Index() {
         title="Student Deals & Discounts | Save Money on Fashion, Tech & More"
         description="TARAA is the #1 platform for Indian students to find exclusive deals, discounts, and offers on fashion, electronics, books, and more. Save big today!"
       />
-      {/* Hero Section - Reduced padding for tighter layout */}
-      <section className="bg-gradient-to-br from-blue-50 via-green-50 to-yellow-50 py-8 md:py-12 lg:py-16">
+      {/* Hero Section - Optimized for Mobile */}
+      <section className="bg-gradient-to-br from-blue-50 via-green-50 to-yellow-50 py-6 sm:py-8 md:py-12 lg:py-16">
         <div className="container mx-auto px-4 sm:px-6">
-          <div className="grid md:grid-cols-2 gap-8 md:gap-12 items-center">
-            {/* Left: Text Content */}
-            <div className="space-y-4 md:space-y-6 text-center md:text-left">
-              <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold leading-tight">
-                Student Deals And
-                <span className="block text-primary mt-1">Budget Store.</span>
+          <div className="flex flex-col-reverse md:grid md:grid-cols-2 gap-6 md:gap-12 items-center">
+            {/* Left: Text Content - Mobile First */}
+            <div className="space-y-3 sm:space-y-4 md:space-y-6 text-center md:text-left">
+              <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-7xl font-extrabold leading-tight">
+                Student Deals
+                <span className="block text-primary mt-0 sm:mt-1">Budget Store.</span>
               </h1>
-              <p className="text-base sm:text-lg md:text-xl text-muted-foreground max-w-lg mx-auto md:mx-0">
-                Shopping for trendy fashion is a bit of a relaxing hobby for students, which is sometimes troubling for the bank balance. We've got you covered!
+              <p className="text-sm sm:text-base md:text-lg text-muted-foreground max-w-lg mx-auto md:mx-0">
+                Trendy fashion for students at budget-friendly prices. We've got you covered!
               </p>
-              <div className="flex flex-col sm:flex-row gap-3 md:gap-4 justify-center md:justify-start">
+              <div className="flex flex-col sm:flex-row gap-3 justify-center md:justify-start">
                 <Button
                   size="lg"
                   onClick={scrollToProducts}
-                  className="bg-primary hover:bg-primary/90 text-white font-semibold px-6 md:px-8 py-5 md:py-6 rounded-full text-base md:text-lg"
+                  className="bg-primary hover:bg-primary/90 text-white font-semibold px-5 sm:px-6 py-4 sm:py-5 md:py-6 rounded-full text-sm sm:text-base"
                 >
                   Browse Deals
                 </Button>
@@ -95,16 +95,16 @@ export default function Index() {
                   variant="outline"
                   size="lg"
                   asChild
-                  className="font-semibold px-6 md:px-8 py-5 md:py-6 rounded-full text-base md:text-lg border-2"
+                  className="font-semibold px-5 sm:px-6 py-4 sm:py-5 md:py-6 rounded-full text-sm sm:text-base border-2"
                 >
                   <Link to="/about">Learn More</Link>
                 </Button>
               </div>
             </div>
 
-            {/* Right: Visual */}
-            <div className="relative">
-              <div className="grid grid-cols-2 gap-3 md:gap-4">
+            {/* Right: Visual - Optimized for Mobile */}
+            <div className="relative w-full">
+              <div className="grid grid-cols-2 gap-2 sm:gap-3 md:gap-4">
                 {[
                   {
                     img: "https://images.unsplash.com/photo-1523381210434-271e8be1f52b?w=500&q=80",
@@ -128,9 +128,10 @@ export default function Index() {
                       <img
                         src={item.img}
                         alt={item.alt}
-                        className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                        className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+                        loading={idx > 1 ? "lazy" : "eager"}
                       />
-                      <div className="absolute inset-0 bg-black/10 group-hover:bg-black/0 transition-colors" />
+                      <div className="absolute inset-0 bg-black/5 group-hover:bg-black/0 transition-colors duration-300" />
                     </div>
                   </Card>
                 ))}
@@ -170,10 +171,17 @@ export default function Index() {
               Grab the coolest tees at unbeatable prices!
             </p>
           </div>
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-6">
-            {featuredProducts.map((product) => (
-              <ProductCard key={product.id} product={product} />
-            ))}
+          <div className="relative group">
+            <div className="flex overflow-x-auto gap-4 pb-6 snap-x snap-mandatory scrollbar-hide -mx-4 px-4 sm:mx-0 sm:px-0">
+              {featuredProducts.map((product) => (
+                <div 
+                  key={product.id} 
+                  className="flex-none w-[280px] sm:w-[320px] snap-center first:pl-0 last:pr-4"
+                >
+                  <ProductCard product={product} />
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </section>
@@ -190,32 +198,47 @@ export default function Index() {
             </p>
           </div>
 
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
-            {categories.map((cat, idx) => (
-              <Link key={idx} to={cat.link} className="block h-full">
-                <Card className={`overflow-hidden group hover:shadow-xl transition-all duration-300 h-48 md:h-64 ${cat.color} cursor-pointer relative border-0`}>
-                  <CardContent className="p-0 h-full relative">
-                    <div className="absolute inset-0 flex flex-col justify-between p-6 z-10">
-                      <h3 className="text-xl md:text-2xl font-bold text-white drop-shadow-lg">
-                        {cat.name}
-                      </h3>
-                      <div className="w-10 h-10 md:w-12 md:h-12 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center group-hover:scale-110 transition-transform">
-                        <cat.icon className="h-5 w-5 md:h-6 md:w-6 text-white" />
-                      </div>
-                    </div>
+          <div className="relative">
+            <div className="flex overflow-x-auto gap-4 pb-6 snap-x snap-mandatory scrollbar-hide -mx-4 px-4 sm:mx-0 sm:px-0">
+              {categories.map((cat, idx) => (
+                <div key={idx} className="flex-none w-[calc(100vw-3rem)] sm:w-80 snap-center first:pl-0 last:pr-4">
+                  <Link to={cat.link} className="block h-full">
+                    <Card className={`overflow-hidden group hover:shadow-xl transition-all duration-300 h-64 ${cat.color} cursor-pointer relative border-0`}>
+                      <CardContent className="p-0 h-full relative">
+                        <div className="absolute inset-0 flex flex-col justify-between p-6 z-10">
+                          <h3 className="text-2xl font-bold text-white drop-shadow-lg leading-tight">
+                            {cat.name}
+                          </h3>
+                          <div className="w-12 h-12 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center group-hover:scale-110 transition-transform">
+                            <cat.icon className="h-6 w-6 text-white" />
+                          </div>
+                        </div>
 
-                    {/* Image Overlay */}
-                    <div className="absolute inset-0 mix-blend-overlay opacity-20 group-hover:opacity-30 transition-opacity">
-                      <img
-                        src={cat.image}
-                        alt={cat.name}
-                        className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                      />
-                    </div>
-                  </CardContent>
-                </Card>
-              </Link>
-            ))}
+                        {/* Image Overlay */}
+                        <div className="absolute inset-0 mix-blend-overlay opacity-20 group-hover:opacity-30 transition-opacity">
+                          <img
+                            src={cat.image}
+                            alt={cat.name}
+                            className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                          />
+                        </div>
+                      </CardContent>
+                    </Card>
+                  </Link>
+                </div>
+              ))}
+            </div>
+            
+            {/* Scroll indicator for mobile */}
+            <div className="md:hidden flex justify-center gap-2 mt-4">
+              {categories.map((_, idx) => (
+                <span 
+                  key={idx}
+                  className="w-2 h-2 rounded-full bg-gray-300"
+                  aria-hidden="true"
+                />
+              ))}
+            </div>
           </div>
         </div>
       </section>

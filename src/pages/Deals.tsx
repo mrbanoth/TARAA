@@ -16,7 +16,7 @@
  */
 
 import { useState, useMemo, useEffect } from "react";
-import { useSearchParams, Link } from "react-router-dom";
+import { useSearchParams, Link, useLocation } from "react-router-dom";
 import Layout from "@/components/Layout";
 import ProductGrid from "@/components/ProductGrid";
 import ProductCarousel from "@/components/ProductCarousel";
@@ -55,6 +55,7 @@ interface Filters {
   priceRange: string[];
   sizes: string[];
   search: string;
+  gender: string | null;
 }
 
 // ====================================
@@ -63,7 +64,16 @@ interface Filters {
 export default function Deals() {
   const [searchParams] = useSearchParams();
   const categoryParam = searchParams.get("category");
+  const location = useLocation();
   const { products, loading } = useProducts();
+
+  // Extract gender from pathname
+  const getGenderFromPath = (path: string) => {
+    if (path.startsWith('/men')) return 'men';
+    if (path.startsWith('/women')) return 'women';
+    if (path.startsWith('/unisex')) return 'unisex';
+    return null;
+  };
 
   // Filter state
   const [filters, setFilters] = useState<Filters>({
@@ -71,14 +81,28 @@ export default function Deals() {
     priceRange: [],
     sizes: [],
     search: "",
+    gender: getGenderFromPath(location.pathname)
   });
 
-  // Update filters when URL param changes
+  // Update filters when URL or path changes
   useEffect(() => {
+    const newFilters: Partial<Filters> = {};
+    
     if (categoryParam) {
-      setFilters(prev => ({ ...prev, category: categoryParam as Category }));
+      newFilters.category = categoryParam as Category;
+    } else {
+      newFilters.category = "all";
     }
-  }, [categoryParam]);
+    
+    const genderFromPath = getGenderFromPath(location.pathname);
+    if (genderFromPath) {
+      newFilters.gender = genderFromPath;
+    } else {
+      newFilters.gender = null;
+    }
+    
+    setFilters(prev => ({ ...prev, ...newFilters }));
+  }, [categoryParam, location.pathname]);
 
   // Filter products based on current filters
   const filteredProducts = useMemo(() => {
@@ -95,6 +119,11 @@ export default function Deals() {
 
       // Category filter
       if (filters.category !== "all" && product.category !== filters.category) {
+        return false;
+      }
+      
+      // Gender filter
+      if (filters.gender && product.gender && product.gender !== filters.gender) {
         return false;
       }
 
@@ -138,20 +167,24 @@ export default function Deals() {
   };
 
   const handleClearFilters = () => {
-    setFilters({ category: "all", priceRange: [], sizes: [], search: "" });
+    setFilters({ category: "all", priceRange: [], sizes: [], search: "", gender: null });
+    // Navigate back to /deals when clearing filters
+    window.history.pushState({}, '', '/deals');
   };
 
-  // Check if any filters are active
+  // Check if any filters are active (excluding gender from path)
   const hasActiveFilters =
     filters.category !== "all" ||
     filters.priceRange.length > 0 ||
     filters.sizes.length > 0 ||
-    filters.search.length > 0;
+    filters.search.length > 0 ||
+    (!!filters.gender && !['/men', '/women', '/unisex'].includes(location.pathname));
 
   const activeFilterCount =
     (filters.category !== "all" ? 1 : 0) +
     filters.priceRange.length +
-    filters.sizes.length;
+    filters.sizes.length +
+    (filters.gender ? 1 : 0);
 
   // ====================================
   // RENDER

@@ -1,7 +1,7 @@
 
 import { ReactNode, useState } from "react";
-import { Link } from "react-router-dom";
-import { Menu, X, ShoppingBag, Heart, Search, Phone, Mail } from "lucide-react";
+import { Link, useLocation } from "react-router-dom";
+import { Menu, X, ShoppingBag, Heart, Search, Phone, Mail, Shirt, User, User2, Users, Shirt as ShirtIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Badge } from "@/components/ui/badge";
@@ -22,6 +22,8 @@ const navLinks = [
 export default function Layout({ children }: LayoutProps) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const { favorites } = useFavorites();
+  const location = useLocation();
+  const isDealsPage = location.pathname === '/deals';
 
   return (
     <div className="min-h-screen flex flex-col bg-background text-foreground">
@@ -131,8 +133,34 @@ export default function Layout({ children }: LayoutProps) {
                 Handpicked Deals
               </Badge>
 
-              {/* Mobile Menu */}
-              <div className="md:hidden">
+              {/* Mobile Menu and Gender Filters */}
+              <div className="md:hidden flex items-center gap-2">
+                {/* Gender Filters - Mobile Navbar */}
+                <div className="flex items-center gap-1">
+                  <Link
+                    to="/men"
+                    className={`p-2 rounded-full ${location.pathname === '/men' ? 'bg-primary/10 text-primary' : 'text-muted-foreground hover:bg-accent/50'}`}
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
+                    <User className="h-5 w-5" />
+                  </Link>
+                  <Link
+                    to="/women"
+                    className={`p-2 rounded-full ${location.pathname === '/women' ? 'bg-primary/10 text-primary' : 'text-muted-foreground hover:bg-accent/50'}`}
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
+                    <User2 className="h-5 w-5" />
+                  </Link>
+                  <Link
+                    to="/unisex"
+                    className={`p-2 rounded-full ${location.pathname === '/unisex' ? 'bg-primary/10 text-primary' : 'text-muted-foreground hover:bg-accent/50'}`}
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
+                    <Users className="h-5 w-5" />
+                  </Link>
+                </div>
+                
+                {/* Mobile Menu Button */}
                 <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
                   <SheetTrigger asChild>
                     <Button variant="ghost" size="icon" className="group hover:bg-transparent">
@@ -169,6 +197,51 @@ export default function Layout({ children }: LayoutProps) {
                             {link.label}
                           </NavLink>
                         ))}
+                        
+                        {/* Gender Filters in Mobile Menu - Only show on Deals page */}
+                        {isDealsPage && (
+                          <div className="pt-2 border-t border-border mt-2">
+                            <h3 className="text-sm font-medium text-muted-foreground mb-2 px-2">Filter by Gender</h3>
+                            <div className="grid grid-cols-3 gap-2">
+                              <Link
+                                to="/men"
+                                className={`flex flex-col items-center justify-center p-3 rounded-md transition-colors ${
+                                  location.pathname === '/men'
+                                    ? 'bg-primary/10 text-primary' 
+                                    : 'bg-accent/20 hover:bg-accent/50'
+                                }`}
+                                onClick={() => setMobileMenuOpen(false)}
+                              >
+                                <User className="h-5 w-5 mb-1" />
+                                <span className="text-xs font-medium">Men</span>
+                              </Link>
+                              <Link
+                                to="/women"
+                                className={`flex flex-col items-center justify-center p-3 rounded-md transition-colors ${
+                                  location.pathname === '/women'
+                                    ? 'bg-primary/10 text-primary' 
+                                    : 'bg-accent/20 hover:bg-accent/50'
+                                }`}
+                                onClick={() => setMobileMenuOpen(false)}
+                              >
+                                <User2 className="h-5 w-5 mb-1" />
+                                <span className="text-xs font-medium">Women</span>
+                              </Link>
+                              <Link
+                                to="/unisex"
+                                className={`flex flex-col items-center justify-center p-3 rounded-md transition-colors ${
+                                  location.pathname === '/unisex'
+                                    ? 'bg-primary/10 text-primary' 
+                                    : 'bg-accent/20 hover:bg-accent/50'
+                                }`}
+                                onClick={() => setMobileMenuOpen(false)}
+                              >
+                                <Users className="h-5 w-5 mb-1" />
+                                <span className="text-xs font-medium">Unisex</span>
+                              </Link>
+                            </div>
+                          </div>
+                        )}
                         <Link
                           to="/saved"
                           className="text-lg font-medium text-foreground hover:text-primary transition-colors py-2 flex items-center justify-between"
