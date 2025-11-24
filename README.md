@@ -43,39 +43,9 @@ TARAA is India's premier student-focused deals platform, bringing you handpicked
 </div>
 
 
-  .screenshot-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 2rem;
-    margin: 2rem 0;
-  }
-  .screenshot-item {
-    text-align: center;
-    transition: transform 0.3s ease;
-  }
-  .screenshot-item:hover {
-    transform: translateY(-5px);
-  }
-  .screenshot {
-    max-width: 100%;
-    height: auto;
-    border-radius: 8px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    border: 1px solid #eaeaea;
-  }
-  .screenshot-caption {
-    margin-top: 0.5rem;
-    color: #666;
-    font-size: 0.9em;
-  }
-  @media (max-width: 768px) {
-    .screenshot-grid {
-      grid-template-columns: 1fr;
-    }
-  }
-</style>
+  
 
----
+
 
 ## 🎯 Key Features
 
