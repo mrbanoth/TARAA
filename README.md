@@ -4,11 +4,63 @@
 
 **TARAA** is a curated deals platform designed specifically for students. We handpick the best budget-friendly products from trusted platforms like **Meesho**, **Amazon**, **Flipkart**, **Myntra**, **Ajio**, and **Shopsy**.
 
-<div align="center">
-  <img src="https://raw.githubusercontent.com/MrBanoth/TARAA/main/public/og-image.png" alt="TARAA Preview" width="600" />
+## 📱 TARAA Screenshots
+
+<div align="center" class="screenshot-grid">
+  <div class="screenshot-item">
+    <a href="./public/ot1.jpg" target="_blank" rel="noopener noreferrer">
+      <img src="./public/ot1.jpg" alt="TARAA Desktop View" class="screenshot" />
+    </a>
+    <p class="screenshot-caption">Desktop View</p>
+  </div>
+  
+  <div class="screenshot-item">
+    <a href="./public/ot2.png" target="_blank" rel="noopener noreferrer">
+      <img src="./public/ot2.png" alt="TARAA Mobile View" class="screenshot" />
+    </a>
+    <p class="screenshot-caption">Mobile View</p>
+  </div>
+  
+  <div class="screenshot-item">
+    <a href="./public/ot3.png" target="_blank" rel="noopener noreferrer">
+      <img src="./public/ot3.png" alt="TARAA Admin Panel" class="screenshot" />
+    </a>
+    <p class="screenshot-caption">Admin Panel</p>
+  </div>
 </div>
 
-*Screenshot of TARAA - Smart Deals for Students*
+<style>
+  .screenshot-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    margin: 2rem 0;
+  }
+  .screenshot-item {
+    text-align: center;
+    transition: transform 0.3s ease;
+  }
+  .screenshot-item:hover {
+    transform: translateY(-5px);
+  }
+  .screenshot {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    border: 1px solid #eaeaea;
+  }
+  .screenshot-caption {
+    margin-top: 0.5rem;
+    color: #666;
+    font-size: 0.9em;
+  }
+  @media (max-width: 768px) {
+    .screenshot-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
 
 ---
 
