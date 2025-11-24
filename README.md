@@ -42,7 +42,7 @@ TARAA is India's premier student-focused deals platform, bringing you handpicked
   </div>
 </div>
 
-<style>
+
   .screenshot-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
