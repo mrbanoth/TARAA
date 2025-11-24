@@ -42,7 +42,7 @@ If you want to run this project locally:
 
 1.  **Clone the repo**
     ```bash
-    git clone https://github.com/yourusername/taraa.git
+    git clone https://github.com/MrBanoth/TARAA.git
     cd taraa
     ```
 
@@ -90,10 +90,22 @@ If you want to run this project locally:
 
 ## 🤝 Contact & Support
 
-**Founder:** Sandeep  
-**Email:** [sandeepnaikb0@gmail.com](mailto:sandeepnaikb0@gmail.com)
+**Founder:** [Sandeep](https://mrbanoth.online)  
+**GitHub:** [@MrBanoth](https://github.com/MrBanoth)
 
 ---
+
+## ☕ Support the Project
+
+If you find TARAA helpful, consider supporting its development:
+
+[![Buy Me A Coffee](https://img.shields.io/badge/Buy_Me_A_Coffee-FFDD00?style=for-the-badge&logo=buy-me-a-coffee&logoColor=black)](https://www.buymeacoffee.com/mrbanoth)
+
+## 🌐 Connect with Me
+
+- **Personal Website:** [mrbanoth.online](https://mrbanoth.online) 🌐
+- **GitHub:** [@MrBanoth](https://github.com/MrBanoth) 💻
+- **Email:** [sandeepnaikb0@gmail.com](mailto:sandeepnaikb0@gmail.com) ✉️
 
 ## ❤️ Made for Students, By Students
 
