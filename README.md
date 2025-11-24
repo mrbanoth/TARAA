@@ -17,35 +17,6 @@ TARAA is India's premier student-focused deals platform, bringing you handpicked
 - 💯 Verified deals only
 - 📱 Mobile-optimized experience
 
-## 📱 TARAA in Action
-
-<div align="center" class="screenshot-grid">
-  <div class="screenshot-item">
-    <a href="./public/ot1.jpg" target="_blank" rel="noopener noreferrer">
-      <img src="./public/ot1.jpg" alt="TARAA Desktop View" class="screenshot" />
-    </a>
-    <p class="screenshot-caption">Desktop View</p>
-  </div>
-  
-  <div class="screenshot-item">
-    <a href="./public/ot2.png" target="_blank" rel="noopener noreferrer">
-      <img src="./public/ot2.png" alt="TARAA Mobile View" class="screenshot" />
-    </a>
-    <p class="screenshot-caption">Mobile View</p>
-  </div>
-  
-  <div class="screenshot-item">
-    <a href="./public/ot3.png" target="_blank" rel="noopener noreferrer">
-      <img src="./public/ot3.png" alt="TARAA Admin Panel" class="screenshot" />
-    </a>
-    <p class="screenshot-caption">Admin Panel</p>
-  </div>
-</div>
-
-
-  
-
-
 
 ## 🎯 Key Features
 
@@ -68,29 +39,25 @@ TARAA is India's premier student-focused deals platform, bringing you handpicked
 
 ## 💌 Get in Touch
 
-Have questions or suggestions? We'd love to hear from you!
+Have questions or suggestions? I'd love to hear from you!
 
-- **Email:** [hello@taraa.online](mailto:hello@taraa.online)
-- **Twitter:** [@TaraaDeals](https://twitter.com/TaraaDeals)
-- **Instagram:** [@taraadeals](https://instagram.com/taraadeals)
+- **Email:** [sandeepnaikb0@gmail.com](mailto:sandeepnaikb0@gmail.com)
+- **Support My Work:** [Buy Me A Coffee](https://www.buymeacoffee.com/mrbanoth)
 
-## 💝 Support Our Mission
+## � TARAA in Action
 
-TARAA is built with ❤️ to help students save money. If you find our platform useful, consider supporting us:
+Here's a quick look at what TARAA offers:
 
-[![Buy Me A Coffee](https://img.shields.io/badge/Buy_Me_A_Coffee-FFDD00?style=for-the-badge&logo=buy-me-a-coffee&logoColor=black)](https://www.buymeacoffee.com/mrbanoth)
-
-Your support helps us maintain and improve TARAA for students everywhere!
-
----
-
-## 🌟 Join Our Community
-
-Connect with thousands of students who are already saving with TARAA:
-
-- **Facebook Group:** [TARAA Student Deals](https://facebook.com/groups/taraadeals)
-- **Telegram Channel:** [@TaraaDeals](https://t.me/taraadeals)
-- **Discord:** [Join our server](https://discord.gg/taraa)
+<div align="center">
+  <img src="https://raw.githubusercontent.com/MrBanoth/TARAA/main/public/ot1.jpg" alt="TARAA Desktop View" width="80%" style="border-radius: 8px; margin: 1rem 0; box-shadow: 0 4px 6px rgba(0,0,0,0.1);" />
+  <p>Desktop View</p>
+  
+  <img src="https://raw.githubusercontent.com/MrBanoth/TARAA/main/public/ot2.png" alt="TARAA Mobile View" width="40%" style="border-radius: 8px; margin: 1rem 0; box-shadow: 0 4px 6px rgba(0,0,0,0.1);" />
+  <p>Mobile View</p>
+  
+  <img src="https://raw.githubusercontent.com/MrBanoth/TARAA/main/public/ot3.png" alt="TARAA Admin Panel" width="80%" style="border-radius: 8px; margin: 1rem 0; box-shadow: 0 4px 6px rgba(0,0,0,0.1);" />
+  <p>Admin Panel</p>
+</div>
 
 ---
 
@@ -100,8 +67,6 @@ Connect with thousands of students who are already saving with TARAA:
     <img src="https://img.shields.io/badge/Visit_TARAA-4CAF50?style=for-the-badge&logo=internet-explorer&logoColor=white" alt="Visit TARAA" />
   </a>
   
-  <p>Made with ❤️ in India</p>
+  <p>Made with ❤️ by <a href="https://mrbanoth.online" target="_blank">Sandeep</a></p>
   <p>© 2024 TARAA. All rights reserved.</p>
 </div>
-
-*© 2024 TARAA. All rights reserved.*
