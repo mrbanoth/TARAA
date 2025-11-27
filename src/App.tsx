@@ -45,7 +45,7 @@ const App = () => {
             <TawkToChat />
             <CartProvider>
               <AdminProvider>
-                <div className="fixed top-4 right-4 z-40 md:top-6 md:right-6">
+                <div className="fixed top-4 right-4 z-40 hidden md:block md:top-6 md:right-6">
                   <CartIcon onClick={() => setIsCartOpen(true)} />
                 </div>
                 <CartDrawer isOpen={isCartOpen} onClose={() => setIsCartOpen(false)} />
