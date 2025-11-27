@@ -21,51 +21,65 @@ import Unisex from "./pages/Unisex";
 import AdminLogin from "./pages/admin/Login";
 import AdminDashboard from "./pages/admin/Dashboard";
 import { AdminProvider } from "./contexts/AdminContext";
+import { CartProvider } from "./contexts/CartContext";
 import { SmoothScrollProvider } from "@/components/providers/SmoothScrollProvider";
 import ProtectedRoute from "./components/ProtectedRoute";
 import NotFound from "./pages/NotFound";
+import { useState } from "react";
+import { CartDrawer } from "./components/CartDrawer";
+import { CartIcon } from "./components/CartIcon";
 
 const queryClient = new QueryClient();
 
-const App = () => (
-  <QueryClientProvider client={queryClient}>
-    <TooltipProvider>
-      <Toaster />
-      <Sonner />
-      <BrowserRouter>
-        <SmoothScrollProvider>
-        <ScrollToTop />
-        <TawkToChat />
-        <AdminProvider>
-          <Routes>
-            <Route path="/" element={<Index />} />
-            <Route path="/deals" element={<Deals />} />
-            <Route path="/product/:id" element={<ProductDetails />} />
-            <Route path="/saved" element={<Saved />} />
-            <Route path="/men" element={<Men />} />
-            <Route path="/women" element={<Women />} />
-            <Route path="/unisex" element={<Unisex />} />
-            <Route path="/about" element={<About />} />
-            <Route path="/contact" element={<Contact />} />
-            <Route path="/legal/disclaimer" element={<Disclaimer />} />
+const App = () => {
+  const [isCartOpen, setIsCartOpen] = useState(false);
 
-            {/* Admin Routes */}
-            <Route path="/admin" element={<AdminLogin />} />
-            <Route
-              path="/admin/dashboard"
-              element={
-                <ProtectedRoute>
-                  <AdminDashboard />
-                </ProtectedRoute>
-              }
-            />
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-        </AdminProvider>
-      </SmoothScrollProvider>
-    </BrowserRouter>
-  </TooltipProvider>
-</QueryClientProvider>
-);
+  return (
+    <QueryClientProvider client={queryClient}>
+      <TooltipProvider>
+        <Toaster />
+        <Sonner />
+        <BrowserRouter>
+          <SmoothScrollProvider>
+            <ScrollToTop />
+            <TawkToChat />
+            <CartProvider>
+              <AdminProvider>
+                <div className="fixed top-4 right-4 z-40 md:top-6 md:right-6">
+                  <CartIcon onClick={() => setIsCartOpen(true)} />
+                </div>
+                <CartDrawer isOpen={isCartOpen} onClose={() => setIsCartOpen(false)} />
+                <Routes>
+                  <Route path="/" element={<Index />} />
+                  <Route path="/deals" element={<Deals />} />
+                  <Route path="/product/:id" element={<ProductDetails />} />
+                  <Route path="/saved" element={<Saved />} />
+                  <Route path="/men" element={<Men />} />
+                  <Route path="/women" element={<Women />} />
+                  <Route path="/unisex" element={<Unisex />} />
+                  <Route path="/about" element={<About />} />
+                  <Route path="/contact" element={<Contact />} />
+                  <Route path="/legal/disclaimer" element={<Disclaimer />} />
+
+                  {/* Admin Routes */}
+                  <Route path="/admin" element={<AdminLogin />} />
+                  <Route
+                    path="/admin/dashboard"
+                    element={
+                      <ProtectedRoute>
+                        <AdminDashboard />
+                      </ProtectedRoute>
+                    }
+                  />
+                  <Route path="*" element={<NotFound />} />
+                </Routes>
+              </AdminProvider>
+            </CartProvider>
+          </SmoothScrollProvider>
+        </BrowserRouter>
+      </TooltipProvider>
+    </QueryClientProvider>
+  );
+};
 
 export default App;

@@ -7,6 +7,7 @@ import { Product } from "@/data/products";
 import { useFavorites } from "@/hooks/useFavorites";
 import { toast } from "sonner";
 import { isTrending } from "@/data/config";
+import { useState, useCallback } from "react";
 
 interface ProductCardProps {
   product: Product;
@@ -24,22 +25,52 @@ export default function ProductCard({ product }: ProductCardProps) {
     toast.success(newState ? "Added to favorites ❤️" : "Removed from favorites");
   };
 
+  const [imageLoaded, setImageLoaded] = useState(false);
+  const [imageError, setImageError] = useState(false);
+
+  const handleImageError = useCallback((e: React.SyntheticEvent<HTMLImageElement>) => {
+    const target = e.target as HTMLImageElement;
+    if (!imageError) {
+      target.src = 'https://via.placeholder.com/300x400?text=Image+Not+Available';
+      setImageError(true);
+    }
+  }, [imageError]);
+
+  const handleImageLoad = useCallback(() => {
+    setImageLoaded(true);
+  }, []);
+
   return (
-    <Link to={`/product/${product.id}`} className="block h-full group">
+    <Link 
+      to={`/product/${product.id}`} 
+      className="block h-full group focus:outline-none focus:ring-2 focus:ring-primary/50 focus:ring-offset-2 rounded-lg"
+      aria-label={`View ${product.name} details`}
+    >
       <div className="h-full">
-        <Card className="h-full overflow-hidden border border-border/30 bg-card/50 flex flex-col hover:shadow-md transition-shadow duration-300">
+        <Card 
+          className="h-full overflow-hidden border border-border/30 bg-card/50 flex flex-col hover:shadow-md transition-all duration-300 hover:border-primary/30"
+          role="article"
+          aria-labelledby={`product-${product.id}-title`}
+        >
           {/* Image Container */}
           <div className="relative aspect-[3/4] overflow-hidden bg-muted/10 flex-shrink-0">
             <div className="w-full h-full">
+              {!imageLoaded && !imageError && (
+                <div className="absolute inset-0 bg-gradient-to-br from-muted/20 to-muted/30 animate-pulse" />
+              )}
               <img
                 src={product.imageUrl}
                 alt={product.name}
-                className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                className={`w-full h-full object-cover transition-transform duration-500 group-hover:scale-105 ${
+                  imageLoaded ? 'opacity-100' : 'opacity-0'
+                }`}
                 loading="lazy"
-                onError={(e) => {
-                  const target = e.target as HTMLImageElement;
-                  target.src = 'https://via.placeholder.com/300x400?text=Image+Not+Available';
-                }}
+                width={300}
+                height={400}
+                onError={handleImageError}
+                onLoad={handleImageLoad}
+                decoding="async"
+                fetchPriority="low"
               />
             </div>
 
@@ -62,8 +93,9 @@ export default function ProductCard({ product }: ProductCardProps) {
               variant="ghost"
               size="icon"
               onClick={handleFavoriteClick}
-              className="absolute top-3 right-3 w-8 h-8 rounded-full bg-white/90 shadow z-20"
-              aria-label={isFav ? "Remove from favorites" : "Add to favorites"}
+              className="absolute top-3 right-3 w-8 h-8 rounded-full bg-white/90 shadow z-20 hover:bg-white focus:ring-2 focus:ring-primary/50 focus:ring-offset-2"
+              aria-label={isFav ? `Remove ${product.name} from favorites` : `Add ${product.name} to favorites`}
+              aria-pressed={isFav}
             >
               <Heart
                 className={`h-4 w-4 ${isFav ? "fill-red-500 text-red-500" : "text-gray-600"}`}
@@ -75,8 +107,9 @@ export default function ProductCard({ product }: ProductCardProps) {
               <Button 
                 variant="outline" 
                 size="sm"
-                className="bg-white/90 text-foreground shadow-sm hover:bg-white/90 hover:text-foreground"
+                className="bg-white/90 text-foreground shadow-sm hover:bg-white/90 hover:text-foreground focus:ring-2 focus:ring-primary/50 focus:ring-offset-2"
                 onClick={(e) => e.preventDefault()}
+                aria-label={`Quick view ${product.name}`}
               >
                 <ShoppingBag className="h-3.5 w-3.5 mr-1.5" />
                 Quick View
@@ -106,6 +139,7 @@ export default function ProductCard({ product }: ProductCardProps) {
 
             {/* Product Title */}
             <h3 
+              id={`product-${product.id}-title`}
               className="font-medium text-sm leading-snug line-clamp-2 min-h-[2.5rem] mb-3 text-foreground/90"
               title={product.name}
             >
