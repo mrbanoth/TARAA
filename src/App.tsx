@@ -1,3 +1,6 @@
+// Import smooth scroll styles
+import './styles/smooth-scroll.css';
+
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -18,6 +21,7 @@ import Unisex from "./pages/Unisex";
 import AdminLogin from "./pages/admin/Login";
 import AdminDashboard from "./pages/admin/Dashboard";
 import { AdminProvider } from "./contexts/AdminContext";
+import { SmoothScrollProvider } from "@/components/providers/SmoothScrollProvider";
 import ProtectedRoute from "./components/ProtectedRoute";
 import NotFound from "./pages/NotFound";
 
@@ -29,6 +33,7 @@ const App = () => (
       <Toaster />
       <Sonner />
       <BrowserRouter>
+        <SmoothScrollProvider>
         <ScrollToTop />
         <TawkToChat />
         <AdminProvider>
@@ -54,13 +59,13 @@ const App = () => (
                 </ProtectedRoute>
               }
             />
-
             <Route path="*" element={<NotFound />} />
           </Routes>
         </AdminProvider>
-      </BrowserRouter>
-    </TooltipProvider>
-  </QueryClientProvider>
+      </SmoothScrollProvider>
+    </BrowserRouter>
+  </TooltipProvider>
+</QueryClientProvider>
 );
 
 export default App;
