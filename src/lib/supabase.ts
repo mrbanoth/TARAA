@@ -10,9 +10,21 @@ const isValidConfig =
     supabaseUrl !== 'https://your-project-id.supabase.co' &&
     supabaseUrl !== '';
 
+// Configure auth options for persistent sessions
 export const supabase = createClient(
     isValidConfig ? supabaseUrl : 'https://placeholder.supabase.co',
-    isValidConfig ? supabaseAnonKey : 'placeholder'
+    isValidConfig ? supabaseAnonKey : 'placeholder',
+    {
+        auth: {
+            autoRefreshToken: true,
+            persistSession: true,
+            detectSessionInUrl: true,
+            storage: window.localStorage,
+            storageKey: 'sb-auth-token',
+            flowType: 'pkce',
+            debug: process.env.NODE_ENV === 'development',
+        },
+    }
 );
 
 export const isSupabaseConfigured = () => isValidConfig;

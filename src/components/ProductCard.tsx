@@ -102,7 +102,9 @@ export default function ProductCard({ product }: ProductCardProps) {
           </div>
           {product.sizes && (
             <div className="text-[10px] md:text-xs text-muted-foreground">
-              {product.sizes.slice(0, 3).join(", ")}
+              {['tshirt', 'shirt', 'pants', 'jeans', 'shorts', 'hoodie', 'sweater', 'jacket', 'coat', 'blazer', 'suit', 'dress', 'skirt', 'top', 'blouse', 'leggings', 'joggers', 'tracksuit', 'sweatshirt', 'cardigan', 'tunic', 'trousers', 'chinos', 'cargos', 'shirt', 't-shirt', 'polo', 'henley', 'tank', 'tank top', 'sleeveless', 'long sleeve', 'short sleeve', 'sleeveless top', 'crop top', 'bodysuit', 'romper', 'jumpsuit', 'playsuit', 'overalls', 'kimono', 'kaftan', 'poncho', 'corset', 'bustier', 'corsage', 'corset top', 'bustier top', 'corsage top', 'corset dress', 'bustier dress', 'corsage dress', 'corset top', 'bustier top', 'corsage top', 'corset dress', 'bustier dress', 'corsage dress'].includes(product.category.toLowerCase()) && (
+                product.sizes.slice(0, 3).join(", ")
+              )}
             </div>
           )}
         </CardFooter>

@@ -13,12 +13,12 @@ export default function Men() {
     const navigate = useNavigate();
     const [searchQuery, setSearchQuery] = useState("");
 
-    // Filter products for Men (ONLY gender="men")
+    // Filter products for Men (case-insensitive matching)
     const menProducts = products.filter((product) => {
-        const gender = product.gender || "unisex";
+        const gender = (product.gender || "unisex").toLowerCase().trim();
 
-        // ONLY show men's products (strict filtering)
-        if (gender !== "men") {
+        // Show men's products (flexible matching)
+        if (!['men', 'male', 'man', 'm', 'unisex'].includes(gender)) {
             return false;
         }
 

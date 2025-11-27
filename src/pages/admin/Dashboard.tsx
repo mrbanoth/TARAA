@@ -9,17 +9,19 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import {
     LogOut, Plus, Image as ImageIcon, Sparkles,
-    Save, Copy, Check, Package, Loader2, Upload, X, Trash2, Menu
+    Save, Copy, Check, Package, Loader2, Upload, X, Trash2, Menu,
+    Shirt, ShirtIcon, Shirt as UnisexIcon, Shirt as WomenIcon, Shirt as MenIcon
 } from "lucide-react";
 import { CATEGORIES } from "@/data/config";
 import { useProducts } from "@/hooks/useProducts";
+import { useCallback } from "react";
 import { supabase, isSupabaseConfigured } from "@/lib/supabase";
 import { toast } from "sonner";
 import AdminTestimonials from "@/components/AdminTestimonials";
 
 export default function AdminDashboard() {
     const { logout } = useAdmin();
-    const { products } = useProducts();
+    const { products, refreshProducts } = useProducts();
     const [activeTab, setActiveTab] = useState("add");
     const [saving, setSaving] = useState(false);
     const [uploading, setUploading] = useState(false);
@@ -31,6 +33,7 @@ export default function AdminDashboard() {
         name: "",
         price: "",
         category: "tshirt",
+        gender: "unisex" as "men" | "women" | "unisex",
         description: "",
         affiliateUrl: "",
         imageUrl: "",
@@ -76,6 +79,11 @@ export default function AdminDashboard() {
         try {
             for (let i = 0; i < files.length; i++) {
                 const file = files[i];
+                // Check file size (max 5MB)
+                if (file.size > 5 * 1024 * 1024) {
+                    throw new Error(`File ${file.name} is too large. Max size is 5MB.`);
+                }
+                
                 const fileExt = file.name.split('.').pop();
                 // unique filename to avoid collisions
                 const fileName = `${Date.now()}-${Math.random()}.${fileExt}`;
@@ -84,7 +92,14 @@ export default function AdminDashboard() {
                 const { error: uploadError } = await supabase.storage
                     .from('products')
                     .upload(filePath, file);
-                if (uploadError) throw uploadError;
+                    
+                if (uploadError) {
+                    // Check for file size error (413) in a type-safe way
+                    if (uploadError.message && uploadError.message.includes('file size')) {
+                        throw new Error('File is too large. Maximum size is 5MB.');
+                    }
+                    throw uploadError instanceof Error ? uploadError : new Error(String(uploadError));
+                }
 
                 // Get the public URL
                 const { data: urlData } = supabase.storage
@@ -107,7 +122,8 @@ export default function AdminDashboard() {
 
             toast.success(`${newImages.length} images uploaded!`);
         } catch (error: unknown) {
-            toast.error('Upload failed: ' + (error instanceof Error ? error.message : 'Unknown error'));
+            console.error('Image upload error:', error);
+            toast.error('Upload failed: ' + (error instanceof Error ? error.message : 'Please try again'));
         } finally {
             setUploading(false);
             if (fileInputRef.current) fileInputRef.current.value = '';
@@ -165,8 +181,9 @@ export default function AdminDashboard() {
                         id: finalId,
                         name: formData.name,
                         description: finalDescription,
-                        price: Number(formData.price) || 0,
+                        price: parseFloat(formData.price) || 0,
                         category: formData.category,
+                        gender: formData.gender || 'unisex', // Ensure gender is always set
                         imageUrl: mainImage,
                         images: formData.images, // Save array of images
                         affiliateUrl: formData.affiliateUrl,
@@ -180,7 +197,13 @@ export default function AdminDashboard() {
                     }
                 ]);
 
-            if (error) throw error;
+            if (error) {
+                // Handle specific Supabase errors without logging out
+                if (error.code === '23505') { // Unique violation
+                    throw new Error('A product with this name already exists');
+                }
+                throw error;
+            }
 
             toast.success("Product saved successfully!");
             // Reset form
@@ -188,6 +211,7 @@ export default function AdminDashboard() {
                 name: "",
                 price: "",
                 category: "tshirt",
+                gender: "unisex",
                 description: "",
                 affiliateUrl: "",
                 imageUrl: "",
@@ -195,12 +219,15 @@ export default function AdminDashboard() {
                 platform: "meesho"
             });
             setExtrapeText("");
+            // Reset form and switch to list tab
             setActiveTab("list");
-
-            setTimeout(() => window.location.reload(), 1000);
+            
+            // Refresh products list without full page reload
+            refreshProducts();
 
         } catch (error: unknown) {
-            toast.error("Failed to save product: " + (error instanceof Error ? error.message : 'Unknown error'));
+            console.error('Save product error:', error);
+            toast.error("Failed to save product: " + (error instanceof Error ? error.message : 'Please try again'));
         } finally {
             setSaving(false);
         }
@@ -212,13 +239,19 @@ export default function AdminDashboard() {
 
         try {
             const { error } = await supabase.from('products').delete().eq('id', id);
-            if (error) throw error;
+            if (error) {
+                if (error.code === '42501') { // Insufficient permissions
+                    throw new Error('You do not have permission to delete this product');
+                }
+                throw error;
+            }
 
             toast.success("Product deleted successfully");
-            // Optimistic update or reload
-            setTimeout(() => window.location.reload(), 500);
+            // Use refreshProducts instead of page reload to maintain session
+            refreshProducts();
         } catch (error: unknown) {
-            toast.error("Failed to delete: " + (error instanceof Error ? error.message : 'Unknown error'));
+            console.error('Delete product error:', error);
+            toast.error("Failed to delete: " + (error instanceof Error ? error.message : 'Please try again'));
         }
     };
 
@@ -226,7 +259,7 @@ export default function AdminDashboard() {
         <div className="min-h-screen bg-slate-50 overflow-x-hidden">
             {/* Header */}
             <header className="bg-white border-b sticky top-0 z-20 shadow-sm">
-                <div className="w-full max-w-7xl mx-auto px-3 sm:px-4 h-16 flex items-center justify-between">
+                <div className="w-full max-w-7xl mx-auto px-3 sm:px-4 h-14 sm:h-16 flex items-center justify-between">
                     <div className="flex items-center gap-2 sm:gap-3 min-w-0">
                         {/* Mobile Hamburger Menu */}
                         <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
@@ -315,10 +348,31 @@ export default function AdminDashboard() {
                 </div>
             </header>
 
-            <main className="w-full max-w-7xl mx-auto px-3 sm:px-4 py-3 sm:py-4 lg:py-8">
+            <main className="w-full max-w-7xl mx-auto px-2 sm:px-4 py-2 sm:py-4 lg:py-6">
                 <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-3 sm:space-y-4 lg:space-y-8">
                     {/* Desktop Tabs */}
-                    <TabsList className="hidden md:grid w-full grid-cols-4 max-w-2xl mx-auto p-1 bg-slate-200/50">
+                    {/* Mobile Tabs */}
+                    <TabsList className="md:hidden grid grid-cols-4 w-full p-0.5 bg-slate-200/50 rounded-lg mb-3 sticky top-14 sm:top-16 z-10">
+                        <TabsTrigger value="add" className="flex flex-col items-center justify-center h-14 sm:h-16 text-xs sm:text-sm p-1 sm:p-2 data-[state=active]:bg-white data-[state=active]:shadow-sm">
+                            <Plus className="h-4 w-4 sm:h-5 sm:w-5 mb-1" />
+                            <span>Add</span>
+                        </TabsTrigger>
+                        <TabsTrigger value="list" className="flex flex-col items-center justify-center h-14 sm:h-16 text-xs sm:text-sm p-1 sm:p-2 data-[state=active]:bg-white data-[state=active]:shadow-sm">
+                            <Package className="h-4 w-4 sm:h-5 sm:w-5 mb-1" />
+                            <span>Products</span>
+                        </TabsTrigger>
+                        <TabsTrigger value="ads" className="flex flex-col items-center justify-center h-14 sm:h-16 text-xs sm:text-sm p-1 sm:p-2 data-[state=active]:bg-white data-[state=active]:shadow-sm">
+                            <Sparkles className="h-4 w-4 sm:h-5 sm:w-5 mb-1" />
+                            <span>Ads</span>
+                        </TabsTrigger>
+                        <TabsTrigger value="testimonials" className="flex flex-col items-center justify-center h-14 sm:h-16 text-xs sm:text-sm p-1 sm:p-2 data-[state=active]:bg-white data-[state=active]:shadow-sm">
+                            <Check className="h-4 w-4 sm:h-5 sm:w-5 mb-1" />
+                            <span>Reviews</span>
+                        </TabsTrigger>
+                    </TabsList>
+
+                    {/* Desktop Tabs */}
+                    <TabsList className="hidden md:grid w-full grid-cols-4 max-w-2xl mx-auto p-0.5 sm:p-1 bg-slate-200/50 rounded-lg">
                         <TabsTrigger value="add" className="data-[state=active]:bg-white data-[state=active]:shadow-sm">Add Product</TabsTrigger>
                         <TabsTrigger value="list" className="data-[state=active]:bg-white data-[state=active]:shadow-sm">All Products</TabsTrigger>
                         <TabsTrigger value="ads" className="data-[state=active]:bg-white data-[state=active]:shadow-sm">Manage Ads</TabsTrigger>
@@ -326,43 +380,17 @@ export default function AdminDashboard() {
                     </TabsList>
 
                     {/* ADD PRODUCT TAB */}
-                    <TabsContent value="add" className="max-w-5xl mx-auto">
-                        <div className="grid lg:grid-cols-12 gap-8">
-                            {/* Left: Extrape Input */}
-                            <div className="lg:col-span-4 space-y-6">
-                                <Card className="border-0 shadow-md">
-                                    <CardHeader className="pb-3">
-                                        <CardTitle className="text-lg flex items-center gap-2">
-                                            <Copy className="h-5 w-5 text-primary" />
-                                            Quick Add
-                                        </CardTitle>
+                    <TabsContent value="add" className="max-w-4xl mx-auto">
+                        <div className="space-y-4 sm:space-y-6">
+                                <Card className="border-0 shadow-sm sm:shadow-md overflow-hidden">
+                                    <CardHeader className="bg-slate-50/50 border-b border-slate-100 pb-3 sm:pb-4 px-4 sm:px-6">
+                                        <CardTitle className="text-base sm:text-lg">Product Details</CardTitle>
                                     </CardHeader>
-                                    <CardContent className="space-y-4">
-                                        <Textarea
-                                            placeholder="Paste text from Extrape/WhatsApp here..."
-                                            className="h-48 resize-none bg-slate-50 border-slate-200 focus:bg-white transition-colors"
-                                            value={extrapeText}
-                                            onChange={(e) => setExtrapeText(e.target.value)}
-                                        />
-                                        <Button onClick={handleParseText} className="w-full" variant="secondary">
-                                            Auto-Fill Details
-                                        </Button>
-                                    </CardContent>
-                                </Card>
-                            </div>
-
-                            {/* Right: Main Form */}
-                            <div className="lg:col-span-8 space-y-6">
-                                <Card className="border-0 shadow-md overflow-hidden">
-                                    <CardHeader className="bg-slate-50/50 border-b border-slate-100 pb-4">
-                                        <CardTitle className="text-lg">Product Details</CardTitle>
-                                    </CardHeader>
-                                    <CardContent className="space-y-6 pt-6">
-
+                                    <CardContent className="space-y-4 sm:space-y-6 pt-4 sm:pt-6 px-4 sm:px-6 pb-4 sm:pb-6">
                                         {/* Image Upload Section */}
-                                        <div className="space-y-3">
-                                            <Label>Product Images</Label>
-                                            <div className="grid grid-cols-4 gap-4">
+                                        <div className="space-y-2 sm:space-y-3">
+                                            <Label className="text-sm sm:text-base">Product Images</Label>
+                                            <div className="grid grid-cols-3 xs:grid-cols-4 sm:grid-cols-5 gap-2 sm:gap-3 md:gap-4">
                                                 {formData.images.map((url, idx) => (
                                                     <div key={idx} className="relative aspect-square rounded-lg overflow-hidden border bg-slate-100 group">
                                                         <img src={url} alt="Product" className="w-full h-full object-cover" />
@@ -448,6 +476,38 @@ export default function AdminDashboard() {
                                                     ))}
                                                 </select>
                                             </div>
+<div className="space-y-2">
+                                                <Label>Gender</Label>
+                                                <div className="grid grid-cols-3 gap-2">
+                                                    <Button
+                                                        type="button"
+                                                        variant={formData.gender === 'men' ? 'default' : 'outline'}
+                                                        className="flex flex-col items-center justify-center h-16 gap-1 text-xs"
+                                                        onClick={() => setFormData({ ...formData, gender: 'men' })}
+                                                    >
+                                                        <Shirt className="h-5 w-5" />
+                                                        <span>Men</span>
+                                                    </Button>
+                                                    <Button
+                                                        type="button"
+                                                        variant={formData.gender === 'women' ? 'default' : 'outline'}
+                                                        className="flex flex-col items-center justify-center h-16 gap-1 text-xs"
+                                                        onClick={() => setFormData({ ...formData, gender: 'women' })}
+                                                    >
+                                                        <ShirtIcon className="h-5 w-5" />
+                                                        <span>Women</span>
+                                                    </Button>
+                                                    <Button
+                                                        type="button"
+                                                        variant={formData.gender === 'unisex' ? 'default' : 'outline'}
+                                                        className="flex flex-col items-center justify-center h-16 gap-1 text-xs"
+                                                        onClick={() => setFormData({ ...formData, gender: 'unisex' })}
+                                                    >
+                                                        <UnisexIcon className="h-5 w-5" />
+                                                        <span>Unisex</span>
+                                                    </Button>
+                                                </div>
+                                            </div>
                                             <div className="space-y-2">
                                                 <Label>Platform</Label>
                                                 <select
@@ -485,18 +545,20 @@ export default function AdminDashboard() {
                                             />
                                         </div>
 
-                                        <Button onClick={handleSave} className="w-full h-12 text-base" size="lg" disabled={saving}>
+                                        <Button onClick={handleSave} className="w-full h-12 text-sm sm:text-base" size="lg" disabled={saving}>
                                             {saving ? <Loader2 className="h-5 w-5 animate-spin mr-2" /> : <Save className="h-5 w-5 mr-2" />}
                                             {saving ? "Saving Product..." : "Save Product"}
                                         </Button>
                                     </CardContent>
                                 </Card>
-                            </div>
                         </div>
                     </TabsContent>
 
                     {/* ADS TAB */}
                     <TabsContent value="ads" className="max-w-4xl mx-auto">
+                        <div className="mb-4 sm:mb-6">
+                            <h2 className="text-lg sm:text-xl font-bold">Manage Advertisements</h2>
+                        </div>
                         <div className="grid gap-8">
                             <Card className="border-0 shadow-md">
                                 <CardHeader>
@@ -570,7 +632,7 @@ export default function AdminDashboard() {
                                     <CardTitle>Active Ads</CardTitle>
                                 </CardHeader>
                                 <CardContent>
-                                    <div className="grid gap-4">
+                                    <div className="grid gap-3 sm:gap-4">
                                         {products.filter(p => p.category === 'ad_banner').length === 0 ? (
                                             <p className="text-center text-muted-foreground py-8">No active ads found.</p>
                                         ) : (
@@ -597,11 +659,17 @@ export default function AdminDashboard() {
 
                     {/* TESTIMONIALS TAB */}
                     <TabsContent value="testimonials">
+                        <div className="mb-4 sm:mb-6">
+                            <h2 className="text-lg sm:text-xl font-bold">Manage Testimonials</h2>
+                        </div>
                         <AdminTestimonials />
                     </TabsContent>
 
                     {/* LIST TAB */}
                     <TabsContent value="list" className="max-w-3xl mx-auto">
+                        <div className="mb-4 sm:mb-6">
+                            <h2 className="text-lg sm:text-xl font-bold">Current Products ({products.length})</h2>
+                        </div>
                         <div className="mb-6">
                             <h2 className="text-2xl font-bold">Current Products ({products.length})</h2>
                         </div>

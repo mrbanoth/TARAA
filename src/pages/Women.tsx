@@ -13,12 +13,12 @@ export default function Women() {
   const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState("");
 
-  // Filter products for Women (ONLY gender="women")
+  // Filter products for Women (case-insensitive matching)
   const womenProducts = products.filter((product) => {
-    const gender = product.gender || "unisex";
+    const gender = (product.gender || "unisex").toLowerCase().trim();
 
-    // ONLY show women's products (strict filtering)
-    if (gender !== "women") {
+    // Show women's products (flexible matching)
+    if (!['women', 'female', 'woman', 'w', 'f'].includes(gender)) {
       return false;
     }
 

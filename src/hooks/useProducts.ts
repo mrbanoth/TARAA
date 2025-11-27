@@ -8,6 +8,25 @@ export function useProducts() {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
 
+    const refreshProducts = async () => {
+        try {
+            setLoading(true);
+            const { data, error } = await supabase
+                .from('products')
+                .select('*')
+                .order('created_at', { ascending: false });
+
+            if (error) throw error;
+            setProducts(data || []);
+        } catch (err: unknown) {
+            const message = err instanceof Error ? err.message : 'Failed to refresh products';
+            setError(message);
+            toast.error(message);
+        } finally {
+            setLoading(false);
+        }
+    };
+
     useEffect(() => {
         async function fetchProducts() {
             try {
@@ -56,5 +75,5 @@ export function useProducts() {
         };
     }, []);
 
-    return { products, loading, error };
+    return { products, loading, error, refreshProducts };
 }

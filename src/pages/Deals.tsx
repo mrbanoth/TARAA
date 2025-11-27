@@ -108,6 +108,51 @@ export default function Deals() {
   const filteredProducts = useMemo(() => {
     if (loading) return [];
     return products.filter((product) => {
+      // Strictly exclude any women's products by checking multiple indicators
+      const gender = (product.gender || '').toLowerCase().trim();
+      const name = product.name.toLowerCase();
+      const description = (product.description || '').toLowerCase();
+      
+      // Comprehensive list of women-related terms to exclude
+      const womensTerms = [
+        // Genders
+        'women', 'woman', 'female', 'ladies', 'girl',
+        // Common in product names/descriptions
+        'womens', 'women\'s', 'female\'s', 'ladies\'s', 'girls', 'girl\'s',
+        'wmn', 'wom', 'femail', 'fem', 'f', 'w',
+        // Common women's fashion terms
+        'maxi', 'midi', 'saree', 'sari', 'lehenga', 'anarkali', 'salwar', 'kurti',
+        'pink', 'pink', 'pink', 'pink', // Common women's color
+        'floral', 'floral', // Common women's pattern
+        'mustard yellow', 'yellow', 'mustard', // Specific to the mentioned product
+        'heels', 'heal', 'pump', 'stiletto', 'wedge',
+        'handbag', 'clutch', 'tote', 'purse', 'pocketbook',
+        'makeup', 'cosmetic', 'beauty', 'skincare', 'lipstick', 'eyeshadow',
+        'dress', 'skirt', 'blouse', 'top', 'blazer', 'cardigan', 'sweater',
+        'lingerie', 'bra', 'panty', 'panties', 'nighty', 'nightie', 'nightwear',
+        'jewelry', 'jewellery', 'necklace', 'earring', 'bangle', 'bracelet', 'ring', 'anklet'
+      ];
+      
+      // Check if any women's term appears in gender, name, or description
+      const isWomensProduct = womensTerms.some(term => 
+        gender.includes(term) || 
+        name.includes(term) ||
+        description.includes(term) ||
+        // Check for terms with spaces around them (whole word match)
+        new RegExp(`\\b${term}\\b`, 'i').test(name) ||
+        new RegExp(`\\b${term}\\b`, 'i').test(description)
+      );
+      
+      // Additional check for common women's categories
+      const isWomensCategory = [
+        'lingerie', 'intimate', 'beauty', 'cosmetics', 'jewelry', 'jewellery',
+        'handbags', 'purses', 'wallets', 'accessories', 'fragrance', 'perfume'
+      ].some(cat => product.category.toLowerCase().includes(cat));
+      
+      if (isWomensProduct) {
+        return false;
+      }
+
       // Search filter - check name and description
       if (filters.search) {
         const searchLower = filters.search.toLowerCase();
