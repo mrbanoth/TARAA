@@ -8,8 +8,6 @@ import ProductGrid from "@/components/ProductGrid";
 import { useProducts } from "@/hooks/useProducts";
 import BentoGrid from "@/components/BentoGrid";
 import HotDeals from "@/components/HotDeals";
-import TestimonialsSection from "@/components/TestimonialsSection";
-
 import SEO from "@/components/SEO";
 
 export default function Index() {
@@ -293,9 +291,6 @@ export default function Index() {
       {/* Newsletter Section */}
       {/* <Newsletter /> */}
 
-
-      {/* Testimonials Section */}
-      <TestimonialsSection />
 
       {/* Collab CTA */}
       < section className="py-16 bg-primary text-white" >

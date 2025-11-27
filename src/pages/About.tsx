@@ -57,6 +57,7 @@ const features = [
 const stats = [
   { 
     number: 1000, 
+    prefix: "",
     suffix: "+", 
     label: "Happy Students", 
     icon: Smile, 
@@ -64,6 +65,7 @@ const stats = [
   },
   { 
     number: 50, 
+    prefix: "",
     suffix: "+", 
     label: "Curated Brands", 
     icon: ShoppingBag, 
@@ -71,6 +73,7 @@ const stats = [
   },
   { 
     number: 24, 
+    prefix: "",
     suffix: "", 
     label: "Hour Support", 
     icon: Headphones, 
@@ -78,6 +81,7 @@ const stats = [
   },
   { 
     number: 100, 
+    prefix: "",
     suffix: "%", 
     label: "Quality Checked", 
     icon: CheckCircle, 
@@ -177,6 +181,122 @@ export default function About() {
                     </div>
                     <h3 className="text-xl font-bold mb-3">{feature.title}</h3>
                     <p className="text-muted-foreground">{feature.description}</p>
+                  </CardContent>
+                </Card>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Testimonials Section */}
+      <section className="py-16 bg-background">
+        <div className="container mx-auto px-4 sm:px-6">
+          <div className="text-center max-w-3xl mx-auto mb-12">
+            <Badge variant="secondary" className="mb-4 bg-primary/10 text-primary px-4 py-1.5 text-sm font-semibold">
+              Testimonials
+            </Badge>
+            <h2 className="text-3xl md:text-4xl font-extrabold mb-4">What Students Say About TARAA</h2>
+            <p className="text-muted-foreground text-lg">
+              Don't just take our word for it - hear from our community
+            </p>
+          </div>
+          
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
+            {[
+              {
+                name: "Rahul Sharma",
+                role: "Computer Science Student",
+                avatar: "/avatars/rahul.jpg",
+                rating: 5,
+                content: "TARAA has completely transformed my wardrobe on a student budget. The quality is amazing for the price!"
+              },
+              {
+                name: "Priya Patel",
+                role: "Business Major",
+                avatar: "/avatars/priya.jpg",
+                rating: 5,
+                content: "I love how easy it is to find stylish yet affordable clothes. The delivery is always super fast!"
+              },
+              {
+                name: "Amit Kumar",
+                role: "Engineering Student",
+                avatar: "/avatars/amit.jpg",
+                rating: 4,
+                content: "Great selection of casual wear. The quality is consistently good and prices are student-friendly."
+              }
+            ].map((testimonial, index) => (
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, y: 30, scale: 0.98 }}
+                whileInView={{ opacity: 1, y: 0, scale: 1 }}
+                whileHover={{ y: -5, boxShadow: '0 10px 25px -5px rgba(0, 0, 0, 0.1)' }}
+                viewport={{ once: true, margin: "-50px" }}
+                transition={{ 
+                  type: 'spring',
+                  stiffness: 300,
+                  damping: 20,
+                  delay: index * 0.1
+                }}
+                className="h-full"
+              >
+                <Card className="h-full border-2 border-primary/10 hover:border-primary/30 bg-card/50 backdrop-blur-sm transition-all duration-300 group">
+                  <CardContent className="p-6 h-full flex flex-col">
+                    <div className="flex-1">
+                      {/* Quote Icon */}
+                      <div className="text-primary/20 group-hover:text-primary/40 transition-colors mb-4">
+                        <svg width="40" height="30" viewBox="0 0 40 30" fill="none" className="transform -scale-x-100">
+                          <path d="M15.2 0L8.8 30H0L10 0h5.2zm20 0L28.8 30H20l10-30h5.2z" fill="currentColor"/>
+                        </svg>
+                      </div>
+                      
+                      {/* Testimonial Text */}
+                      <p className="text-foreground/90 text-base leading-relaxed mb-6 font-medium">
+                        "{testimonial.content}"
+                      </p>
+                    </div>
+                    
+                    {/* Student Info */}
+                    <div className="mt-auto pt-4 border-t border-border/50">
+                      <div className="flex items-center">
+                        <div className="relative">
+                          <div className="w-12 h-12 rounded-full bg-gradient-to-br from-primary/10 to-accent/10 p-0.5">
+                            <div className="rounded-full overflow-hidden w-full h-full border-2 border-background">
+                              <img 
+                                src={testimonial.avatar} 
+                                alt={testimonial.name}
+                                className="w-full h-full object-cover"
+                                loading="lazy"
+                                onError={(e) => {
+                                  const target = e.target as HTMLImageElement;
+                                  target.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(testimonial.name)}&background=random`;
+                                }}
+                              />
+                            </div>
+                          </div>
+                          <div className="absolute -bottom-1 -right-1 w-5 h-5 rounded-full bg-primary flex items-center justify-center">
+                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                              <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+                              <polyline points="22 4 12 14.01 9 11.01"/>
+                            </svg>
+                          </div>
+                        </div>
+                        
+                        <div className="ml-4">
+                          <h4 className="font-semibold text-foreground">{testimonial.name}</h4>
+                          <p className="text-sm text-muted-foreground">{testimonial.role}</p>
+                        </div>
+                        
+                        <div className="ml-auto flex items-center space-x-1">
+                          {[...Array(5)].map((_, i) => (
+                            <Star 
+                              key={i} 
+                              className={`h-4 w-4 ${i < testimonial.rating ? 'text-yellow-400 fill-yellow-400' : 'text-gray-200'}`} 
+                            />
+                          ))}
+                        </div>
+                      </div>
+                    </div>
                   </CardContent>
                 </Card>
               </motion.div>
