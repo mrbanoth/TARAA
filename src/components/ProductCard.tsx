@@ -1,7 +1,8 @@
 import { Link } from "react-router-dom";
-import { Star, Heart, Flame } from "lucide-react";
-import { Card, CardContent, CardFooter } from "@/components/ui/card";
+import { Star, Heart, Flame, ShoppingBag } from "lucide-react";
+import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { Product } from "@/data/products";
 import { useFavorites } from "@/hooks/useFavorites";
 import { toast } from "sonner";
@@ -15,7 +16,7 @@ export default function ProductCard({ product }: ProductCardProps) {
   const { isFavorite, toggleFavorite } = useFavorites();
   const isFav = isFavorite(product.id);
   const isProductTrending = isTrending(product.clicks);
-
+  
   const handleFavoriteClick = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
@@ -24,91 +25,126 @@ export default function ProductCard({ product }: ProductCardProps) {
   };
 
   return (
-    <Link to={`/product/${product.id}`}>
-      <Card className="group overflow-hidden hover:shadow-xl transition-all duration-300 h-full border-2 hover:border-primary/30">
-        <div className="relative aspect-square overflow-hidden bg-gray-100">
-          <img
-            src={product.imageUrl}
-            alt={product.name}
-            className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-          />
-
-          {/* Trending Badge */}
-          {isProductTrending && (
-            <Badge className="absolute top-3 left-3 bg-[hsl(var(--trending))] text-white border-0 shadow-lg">
-              <Flame className="h-3 w-3 mr-1" />
-              Trending
-            </Badge>
-          )}
-
-          {/* Regular Tag */}
-          {!isProductTrending && product.tag && (
-            <Badge className="absolute top-3 left-3 bg-primary text-white shadow-lg">
-              {product.tag}
-            </Badge>
-          )}
-
-          {/* Favorite Button */}
-          <button
-            onClick={handleFavoriteClick}
-            className="absolute top-3 right-3 w-10 h-10 rounded-full bg-white/95 backdrop-blur-sm flex items-center justify-center hover:bg-white hover:scale-110 transition-all shadow-lg z-10"
-            aria-label={isFav ? "Remove from favorites" : "Add to favorites"}
-          >
-            <Heart
-              className={`h-5 w-5 transition-all ${isFav ? "fill-red-500 text-red-500 scale-110" : "text-gray-600"
-                }`}
-            />
-          </button>
-
-          {/* Overlay on Hover */}
-          <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/0 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-        </div>
-
-        <CardContent className="p-3 md:p-4 space-y-1.5 md:space-y-2">
-          {/* Category Badge */}
-          <Badge variant="outline" className="text-[10px] md:text-xs">
-            {product.category.toUpperCase()}
-          </Badge>
-
-          <h3 className="font-bold text-sm md:text-lg mb-1 md:mb-2 line-clamp-1 group-hover:text-primary transition-colors">
-            {product.name}
-          </h3>
-
-          <p className="text-xs md:text-sm text-muted-foreground line-clamp-2 min-h-[32px] md:min-h-[40px]">
-            {product.description}
-          </p>
-
-          {product.rating && (
-            <div className="flex items-center gap-1">
-              <div className="flex">
-                {[...Array(5)].map((_, i) => (
-                  <Star
-                    key={i}
-                    className={`h-3 w-3 md:h-3.5 md:w-3.5 ${i < Math.floor(product.rating || 0)
-                      ? "fill-yellow-400 text-yellow-400"
-                      : "fill-gray-200 text-gray-200"
-                      }`}
-                  />
-                ))}
-              </div>
-              <span className="text-xs md:text-sm font-medium ml-1">{product.rating}</span>
+    <Link to={`/product/${product.id}`} className="block h-full group">
+      <div className="h-full">
+        <Card className="h-full overflow-hidden border border-border/30 bg-card/50 flex flex-col hover:shadow-md transition-shadow duration-300">
+          {/* Image Container */}
+          <div className="relative aspect-[3/4] overflow-hidden bg-muted/10 flex-shrink-0">
+            <div className="w-full h-full">
+              <img
+                src={product.imageUrl}
+                alt={product.name}
+                className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                loading="lazy"
+                onError={(e) => {
+                  const target = e.target as HTMLImageElement;
+                  target.src = 'https://via.placeholder.com/300x400?text=Image+Not+Available';
+                }}
+              />
             </div>
-          )}
-        </CardContent>
 
-        <CardFooter className="p-3 md:p-4 pt-0 flex items-center justify-between">
-          <div>
-            <span className="text-2xl md:text-3xl font-extrabold text-primary">₹{product.price}</span>
+            {/* Status Badge */}
+            <div className="absolute top-3 left-3 z-20">
+              {isProductTrending ? (
+                <Badge className="bg-gradient-to-r from-orange-500 to-pink-500 text-white border-0 text-[10px] font-medium px-2 py-0.5 shadow">
+                  <Flame className="h-3 w-3 mr-1" />
+                  Trending
+                </Badge>
+              ) : product.tag ? (
+                <Badge className="bg-primary/95 text-white border-0 text-[10px] font-medium px-2 py-0.5 shadow">
+                  {product.tag}
+                </Badge>
+              ) : null}
+            </div>
+
+            {/* Favorite Button */}
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={handleFavoriteClick}
+              className="absolute top-3 right-3 w-8 h-8 rounded-full bg-white/90 shadow z-20"
+              aria-label={isFav ? "Remove from favorites" : "Add to favorites"}
+            >
+              <Heart
+                className={`h-4 w-4 ${isFav ? "fill-red-500 text-red-500" : "text-gray-600"}`}
+              />
+            </Button>
+            
+            {/* Quick View Button */}
+            <div className="absolute bottom-3 left-0 right-0 flex justify-center">
+              <Button 
+                variant="outline" 
+                size="sm"
+                className="bg-white/90 text-foreground shadow-sm hover:bg-white/90 hover:text-foreground"
+                onClick={(e) => e.preventDefault()}
+              >
+                <ShoppingBag className="h-3.5 w-3.5 mr-1.5" />
+                Quick View
+              </Button>
+            </div>
           </div>
-          {product.sizes && (
-            <div className="text-[10px] md:text-xs text-muted-foreground">
-              {['tshirt', 'shirt', 'pants', 'jeans', 'shorts', 'hoodie', 'sweater', 'jacket', 'coat', 'blazer', 'suit', 'dress', 'skirt', 'top', 'blouse', 'leggings', 'joggers', 'tracksuit', 'sweatshirt', 'cardigan', 'tunic', 'trousers', 'chinos', 'cargos', 'shirt', 't-shirt', 'polo', 'henley', 'tank', 'tank top', 'sleeveless', 'long sleeve', 'short sleeve', 'sleeveless top', 'crop top', 'bodysuit', 'romper', 'jumpsuit', 'playsuit', 'overalls', 'kimono', 'kaftan', 'poncho', 'corset', 'bustier', 'corsage', 'corset top', 'bustier top', 'corsage top', 'corset dress', 'bustier dress', 'corsage dress', 'corset top', 'bustier top', 'corsage top', 'corset dress', 'bustier dress', 'corsage dress'].includes(product.category.toLowerCase()) && (
-                product.sizes.slice(0, 3).join(", ")
+
+          {/* Product Info */}
+          <CardContent className="p-4 flex flex-col flex-grow">
+            {/* Category and Rating */}
+            <div className="flex justify-between items-center mb-3">
+              <Badge 
+                variant="outline" 
+                className="text-[10px] font-medium px-2 py-0.5 border-border/30 bg-background/80 backdrop-blur-sm truncate max-w-[60%]"
+                title={product.category}
+              >
+                {product.category.toUpperCase()}
+              </Badge>
+              
+              {product.rating && (
+                <div className="flex items-center bg-muted/60 rounded-full px-2 py-0.5">
+                  <Star className="h-3 w-3 fill-yellow-400 text-yellow-400 mr-1" />
+                  <span className="text-xs font-medium">{product.rating}</span>
+                </div>
               )}
             </div>
-          )}
-        </CardFooter>
-      </Card>
+
+            {/* Product Title */}
+            <h3 
+              className="font-medium text-sm leading-snug line-clamp-2 min-h-[2.5rem] mb-3 text-foreground/90"
+              title={product.name}
+            >
+              {product.name}
+            </h3>
+
+            {/* Price and Sizes */}
+            <div className="mt-auto pt-2">
+              <div className="flex items-baseline gap-1.5 mb-3">
+                <span className="text-lg font-bold text-foreground">
+                  ₹{product.price.toLocaleString('en-IN')}
+                </span>
+              </div>
+              
+              {product.sizes && product.sizes.length > 0 && (
+                <div className="flex flex-wrap items-center gap-2">
+                  {product.sizes.slice(0, 4).map((size, i) => (
+                    <span 
+                      key={i} 
+                      className="text-[10px] px-2 py-0.5 bg-muted/40 rounded-full border border-border/30 whitespace-nowrap hover:bg-muted/60 transition-colors"
+                      title={`Size: ${size}`}
+                    >
+                      {size}
+                    </span>
+                  ))}
+                  {product.sizes.length > 4 && (
+                    <span 
+                      className="text-[10px] text-muted-foreground hover:text-foreground transition-colors cursor-default"
+                      title={`${product.sizes.length - 4} more sizes available`}
+                    >
+                      +{product.sizes.length - 4}
+                    </span>
+                  )}
+                </div>
+              )}
+            </div>
+          </CardContent>
+        </Card>
+      </div>
     </Link>
   );
 }
